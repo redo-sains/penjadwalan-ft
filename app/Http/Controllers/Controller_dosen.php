@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\M_dosen;
+use App\Models\M_jurusan;
 use Illuminate\Http\Request;
 
 class Controller_dosen extends Controller
@@ -12,65 +13,64 @@ class Controller_dosen extends Controller
     {
         $title = 'Master dosen';
         $dosens = M_dosen::paginate(5);
-        return view('admin.dosen.index', compact('dosens', 'title'));
-    }
-    public function tambah()
-    {
-        $title = 'Master guru';
-        return view('admin.guru.tambah', compact('title'));
+        $jurusans = M_jurusan::all();
+        return view('admin.dosen.index', compact('dosens', 'title', 'jurusans'));
     }
     public function create(Request $request)
     {
         // Validasi data yang diterima dari form
         $validatedData = $request->validate([
             'nama' => 'required|string|max:255',
-            'kode_guru' => 'required|string|max:50|unique:tb_guru',
+            'kode' => 'required|string|max:50|unique:dosen',
+            'jurusan_id' => 'required|integer|exists:jurusan,id',
         ]);
-        // Simpan data guru baru ke dalam database
-        $guru = new M_dosen();
-        $guru->nama = $request->nama;
-        $guru->kode_guru = $request->kode_guru;
-        $guru->save();
+        $dosen = new M_dosen();
+        $dosen->nama = $request->nama;
+        $dosen->kode = $request->kode;
+        $dosen->jurusan_id = $request->jurusan_id;
+        $dosen->save();
 
         // Jika penyimpanan berhasil, kembalikan respons berhasil
-        return redirect()->route('guru')->with('success', 'Data guru ' . $request->nama . ' berhasil ditambahkan');
+        return redirect()->route('dosen')->with('success', 'Data dosen ' . $request->nama . ' berhasil ditambahkan');
     }
     // controller
     public function edit($id)
     {
-        $title = 'Master guru';
-        $guru = M_dosen::findOrFail($id);
-        return view('admin.guru.edit', compact('title', 'guru'));
+        $title = 'Master dosen';
+        $dosen = M_dosen::findOrFail($id);
+        $jurusans = M_jurusan::all();
+        return view('admin.dosen.edit', compact('title', 'dosen', 'jurusans'));
     }
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'nama' => 'required|string',
-            'kode_guru' => 'required|string|max:50',
+        $validatedData = $request->validate([
+            'nama' => 'required|string|max:255',
+            'kode' => 'required|string|max:50',
+            'jurusan_id' => 'required|integer|exists:jurusan,id',
         ]);
-        $guru = M_dosen::findOrFail($id);
+        $dosen = M_dosen::findOrFail($id);
         // Periksa apakah kode_guru yang baru unik jika diubah
-        if ($request->kode_guru !== $guru->kode_guru) {
+        if ($request->kode !== $dosen->kode) {
             $request->validate([
-                'id_guru' => 'unique:tb_guru,id_guru,' . $id,
+                'id' => 'unique:dosen,id,' . $id,
             ]);
         }
 
-        $guru->nama = $request->nama;
-        $guru->kode_guru = $request->kode_guru;
-        $guru->save();
+        $dosen->nama = $request->nama;
+        $dosen->kode = $request->kode;
+        $dosen->jurusan_id = $request->jurusan_id;
+        $dosen->save();
 
-        return redirect()->route('guru')->with('success', 'Data guru berhasil diperbarui.');
+        return redirect()->route('dosen')->with('success', 'Data dosen berhasil diperbarui.');
     }
     public function delete($id)
     {
         // Temukan guru berdasarkan ID
-        $guru = M_dosen::findOrFail($id);
+        $dosen = M_dosen::findOrFail($id);
         // Hapus guru
-        $guru->delete();
-
+        $dosen->delete();
         // Simpan pesan berhasil ke dalam session
-        return redirect()->back()->with('success', 'Data guru ' . $guru->nama . ' berhasil dihapus');
+        return redirect()->back()->with('success', 'Data dosen ' . $dosen->nama . ' berhasil dihapus');
     }
 }

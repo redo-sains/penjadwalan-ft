@@ -6,13 +6,13 @@
             <div class="container grid px-6 mx-auto">
                 <div class="flex items-center justify-between">
                     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                        Master dosen
+                        Master Ruangan
                     </h2>
 
 
                     <button @click="openModal"
                         class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-                        Tambah dosen
+                        Tambah Ruangan
                     </button>
                 </div>
                 <!-- With actions -->
@@ -23,15 +23,14 @@
                             <thead>
                                 <tr
                                     class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                                    <th class="px-4 py-3">Nama</th>
-                                    <th class="px-4 py-3">Kode dosen</th>
-                                    <th class="px-4 py-3">Jurusan</th>
-                                    <th class="px-4 py-3">Terdaftar</th>
+                                    <th class="px-4 py-3">Ruangan</th>
+                                    <th class="px-4 py-3">Kapasitas</th>
+                                    <th class="px-4 py-3">Kode Ruangan</th>
                                     <th class="px-4 py-3">Actions</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                                @foreach ($dosens as $dosen)
+                                @foreach ($Ruangans as $Ruangan)
                                     <tr class="text-gray-700 dark:text-gray-400">
                                         <td class="px-4 py-3">
                                             <div class="flex items-center text-sm">
@@ -41,33 +40,22 @@
                                                         aria-hidden="true"></div>
                                                 </div>
                                                 <div>
-                                                    <p class="font-semibold">{{ $dosen->nama }}</p>
+                                                    <p class="font-semibold">{{ $Ruangan->nama }}</p>
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="px-4 py-3 text-sm">
-                                            {{ $dosen->kode }}
+                                            {{ $Ruangan->kapasitas }}
                                         </td>
-
                                         <td class="px-4 py-3 text-xs">
                                             <span
-                                                class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 dark:bg-green-700  rounded-full dark:text-green-100">
-                                                @php
-                                                    $jurusanNama =
-                                                        $jurusans->firstWhere('id', $dosen->jurusan_id)->nama ??
-                                                        'Tidak ada';
-                                                @endphp
-                                                {{ $jurusanNama }}
+                                                class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
+                                                {{ $Ruangan->kode }}
                                             </span>
-                                        </td>
-
-
-                                        <td class="px-4 py-3 text-sm">
-                                            {{ $dosen->created_at }}
                                         </td>
                                         <td class="px-4 py-3">
                                             <div class="flex items-center space-x-4 text-sm">
-                                                <a href="{{ route('edit_dosen', ['id' => $dosen->id]) }}"
+                                                <a href="{{ route('edit_ruangan', ['id' => $Ruangan->id]) }}"
                                                     class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                                     aria-label="Edit">
                                                     <svg class="w-5 h-5" aria-hidden="true" fill="currentColor"
@@ -77,7 +65,7 @@
                                                         </path>
                                                     </svg>
                                                 </a>
-                                                <form action="{{ route('hapus_dosen', ['id' => $dosen->id]) }}"
+                                                <form action="{{ route('hapus_ruangan', ['id' => $Ruangan->id]) }}"
                                                     method="post">
                                                     @csrf
                                                     @method('DELETE')
@@ -104,12 +92,12 @@
                     <div
                         class="flex px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
                         <span class="flex items-center  col-span-3">
-                            Showing {{ $dosens->firstItem() }}-{{ $dosens->lastItem() }} of {{ $dosens->total() }}
+                            Showing {{ $Ruangans->firstItem() }}-{{ $Ruangans->lastItem() }} of {{ $Ruangans->total() }}
                         </span>
                         <div
                             class="flex px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
                             <span class="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
-                                {{ $dosens->links() }}
+                                {{ $Ruangans->links() }}
                             </span>
                         </div>
 
@@ -142,16 +130,16 @@
                         </svg>
                     </button>
                 </header>
-                <!-- Modal tambah hari -->
+                <!-- Modal tambah  -->
                 <div class="mt-4 mb-6">
                     <!-- Modal title -->
-                    <p class="mb-2 px-3 text-lg font-semibold text-gray-700 dark:text-gray-300  ">
-                        Tambah Dosen Baru
+                    <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300  ">
+                        Tambah Ruangan
                     </p>
                     <!-- Modal description -->
-                    <form class="grid grid-cols-2" action="{{ route('store_dosen') }}" method="POST">
+                    <form class="grid grid-cols-2" action="{{ route('store_ruangan') }}" method="POST">
                         @csrf
-                        <div class="px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                        <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
                             <label class="block text-sm">
                                 <span class="text-gray-700 dark:text-gray-400">Nama</span>
                                 <!-- focus-within sets the color for the icon when input is focused -->
@@ -159,7 +147,7 @@
                                     class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
                                     <input name="nama"
                                         class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
-                                        placeholder="masukan nama dosen" />
+                                        placeholder="masukan nama Ruangan" />
                                     <div class="absolute inset-y-0 flex items-center ml-3 pointer-events-none">
                                         <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round"
                                             stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"
@@ -172,15 +160,15 @@
                                 </div>
                             </label>
                         </div>
-                        <div class="px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                        <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
                             <label class="block text-sm">
-                                <span class="text-gray-700 dark:text-gray-400">kode dosen</span>
+                                <span class="text-gray-700 dark:text-gray-400">kode Ruangan</span>
                                 <!-- focus-within sets the color for the icon when input is focused -->
                                 <div
                                     class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
                                     <input name="kode"
                                         class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
-                                        placeholder="masukan kode dosen" />
+                                        placeholder="masukan kode Ruangan" />
                                     <div class="absolute inset-y-0 flex items-center ml-3 pointer-events-none">
                                         <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round"
                                             stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"
@@ -193,20 +181,15 @@
                                 </div>
                             </label>
                         </div>
-                        <div class="px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                        <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
                             <label class="block text-sm">
-                                <span class="text-gray-700 dark:text-gray-400">Jurusan</span>
+                                <span class="text-gray-700 dark:text-gray-400">Kapasitas</span>
+                                <!-- focus-within sets the color for the icon when input is focused -->
                                 <div
                                     class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
-                                    <select name="jurusan_id"
-                                        class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-select">
-                                        <option value="#" selected disabled>Pilih jurusan</option>
-                                        @foreach ($jurusans as $jurusan)
-                                            <option value="{{ $jurusan->id }}" class="">
-                                                {{ $jurusan->nama }}</option>
-                                        @endforeach
-                                    </select>
-
+                                    <input name="kapasitas"
+                                        class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
+                                        placeholder="masukan Kapasitas" />
                                     <div class="absolute inset-y-0 flex items-center ml-3 pointer-events-none">
                                         <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round"
                                             stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"
@@ -220,7 +203,7 @@
                             </label>
                         </div>
                         <button type="submit"
-                            class="flex items-center justify-center mt-2  py-3 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple">Simpan</button>
+                            class="flex items-center justify-center p-3 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple">Simpan</button>
                     </form>
                 </div>
 

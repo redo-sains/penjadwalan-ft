@@ -24,44 +24,45 @@ class Controller_jurusan extends Controller
         // Validasi data yang diterima dari form
         $validatedData = $request->validate([
             'nama' => 'required|string|max:255',
-            'kode_guru' => 'required|string|max:50|unique:tb_guru',
+            'kode' => 'required|string|max:50|unique:jurusan',
         ]);
+        // dd($validatedData);
         // Simpan data guru baru ke dalam database
-        $guru = new M_jurusan();
-        $guru->nama = $request->nama;
-        $guru->kode_guru = $request->kode_guru;
-        $guru->save();
+        $jurusan = new M_jurusan();
+        $jurusan->nama = $request->nama;
+        $jurusan->kode = $request->kode;
+        $jurusan->save();
 
         // Jika penyimpanan berhasil, kembalikan respons berhasil
-        return redirect()->route('guru')->with('success', 'Data guru ' . $request->nama . ' berhasil ditambahkan');
+        return redirect()->route('jurusan')->with('success', 'Data jurusan ' . $request->nama . ' berhasil ditambahkan');
     }
     // controller
     public function edit($id)
     {
-        $title = 'Master guru';
-        $guru = M_jurusan::findOrFail($id);
-        return view('admin.guru.edit', compact('title', 'guru'));
+        $title = 'Master Jurusan';
+        $jurusan = M_jurusan::findOrFail($id);
+        return view('admin.jurusan.edit', compact('title', 'jurusan'));
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
             'nama' => 'required|string',
-            'kode_guru' => 'required|string|max:50',
+            'kode' => 'required|string|max:50',
         ]);
-        $guru = M_jurusan::findOrFail($id);
+        $jurusan = M_jurusan::findOrFail($id);
         // Periksa apakah kode_guru yang baru unik jika diubah
-        if ($request->kode_guru !== $guru->kode_guru) {
+        if ($request->kode !== $jurusan->kode) {
             $request->validate([
-                'id_guru' => 'unique:tb_guru,id_guru,' . $id,
+                'id' => 'unique:jurusan,id,' . $id,
             ]);
         }
 
-        $guru->nama = $request->nama;
-        $guru->kode_guru = $request->kode_guru;
-        $guru->save();
+        $jurusan->nama = $request->nama;
+        $jurusan->kode = $request->kode;
+        $jurusan->save();
 
-        return redirect()->route('guru')->with('success', 'Data guru berhasil diperbarui.');
+        return redirect()->route('jurusan')->with('success', 'Data jurusan berhasil diperbarui.');
     }
     public function delete($id)
     {

@@ -130,11 +130,11 @@
                         </svg>
                     </button>
                 </header>
-                <!-- Modal tambah hari -->
+                <!-- Modal tambah  -->
                 <div class="mt-4 mb-6">
                     <!-- Modal title -->
                     <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300  ">
-                        Tambah jam
+                        Tambah Jurusan
                     </p>
                     <!-- Modal description -->
                     <form class="grid grid-cols-2" action="{{ route('store_jurusan') }}" method="POST">
@@ -166,7 +166,7 @@
                                 <!-- focus-within sets the color for the icon when input is focused -->
                                 <div
                                     class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
-                                    <input name="kode_jurusan"
+                                    <input name="kode"
                                         class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
                                         placeholder="masukan kode jurusan" />
                                     <div class="absolute inset-y-0 flex items-center ml-3 pointer-events-none">
