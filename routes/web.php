@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller_jurusan;
 use App\Http\Controllers\Controller_ketersediaan_dosen;
 use App\Http\Controllers\Controller_mata_kuliah;
 use App\Http\Controllers\Controller_ruangan;
+use App\Http\Controllers\Controller_users;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,14 +21,12 @@ use App\Http\Controllers\Controller_ruangan;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
 Route::redirect('/', '/login');
 // routes auth
 Route::get('/login', [Controller_auth::class, 'show'])->name('login');
 Route::post('/login', [Controller_auth::class, 'login'])->name('auth');
 Route::post('/logout', [Controller_auth::class, 'logout'])->name('logout');
 Route::get('/dashboard', [Controller_dashboard::class, 'show'])->name('dashboard');
-
 // routes dosen
 Route::get('/dosen', [Controller_dosen::class, 'show'])->name('dosen');
 Route::delete('/dosen-delete/{id}', [Controller_dosen::class, 'delete'])->name('hapus_dosen');
@@ -58,3 +57,9 @@ Route::delete('/ketersediaan-dosen-delete/{id}', [Controller_ketersediaan_dosen:
 Route::get('/ketersediaan-dosen/{id}/edit', [Controller_ketersediaan_dosen::class, 'edit'])->name('edit_k_dosen');
 Route::put('/ketersediaan-dosen/{id}', [Controller_ketersediaan_dosen::class, 'update'])->name('update_k_dosen');
 Route::post('/ketersediaan-dosen/tambah', [Controller_ketersediaan_dosen::class, 'create'])->name('store_k_dosen');
+// routes users
+Route::get('/user', [Controller_users::class, 'show'])->name('user');
+Route::delete('/user-delete/{id}', [Controller_users::class, 'delete'])->name('hapus_user');
+Route::get('/user/{id}/edit', [Controller_users::class, 'edit'])->name('edit_user');
+Route::put('/user/{id}', [Controller_users::class, 'update'])->name('update_user');
+Route::post('/user/tambah', [Controller_users::class, 'create'])->name('store_user');

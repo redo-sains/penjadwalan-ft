@@ -37,32 +37,23 @@ class Controller_ketersediaan_dosen extends Controller
     public function edit($id)
     {
         $title = 'Master dosen';
-        $ketersediaanDosens = M_ketersediaan_dosen::findOrFail($id);
-        $jurusans = M_jurusan::all();
-        return view('admin.ketersediaanDosens.edit', compact('title', 'ketersediaanDosens', 'jurusans'));
+        $k_dosen = M_ketersediaan_dosen::findOrFail($id);
+        $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+        $dosens = M_dosen::all();
+        return view('admin.ketersediaan_dosen.edit', compact('title', 'k_dosen', 'days', 'dosens'));
     }
 
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'nama' => 'required|string|max:255',
-            'kode' => 'required|string|max:50',
-            'jurusan_id' => 'required|integer|exists:jurusan,id',
+            'dosen_id' => 'required|string|max:255',
+            'hari' => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu',
+            'waktu_mulai' => 'required',
+            'waktu_selesai' => 'required',
         ]);
         $ketersediaanDosen = M_ketersediaan_dosen::findOrFail($id);
-        // Periksa apakah kode_guru yang baru unik jika diubah
-        if ($request->kode !== $ketersediaanDosen->kode) {
-            $request->validate([
-                'id' => 'unique:ketersediaan_dosen,id,' . $id,
-            ]);
-        }
-
-        $ketersediaanDosen->nama = $request->nama;
-        $ketersediaanDosen->kode = $request->kode;
-        $ketersediaanDosen->jurusan_id = $request->jurusan_id;
-        $ketersediaanDosen->save();
-
-        return redirect()->route('dosen')->with('success', 'Data dosen berhasil diperbarui.');
+        $ketersediaanDosen->update($validatedData);
+        return redirect()->route('k_dosen')->with('success', 'Data ketersediaan dosens berhasil diperbarui.');
     }
     public function delete($id)
     {
