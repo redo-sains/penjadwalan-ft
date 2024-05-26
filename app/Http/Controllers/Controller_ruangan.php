@@ -18,62 +18,55 @@ class Controller_ruangan extends Controller
     {
         // Validasi data yang diterima dari form
         $validatedData = $request->validate([
-            'nama' => 'required|string|max:255',
-            'kode' => 'required|string|max:50|unique:ruangan',
-            'semester' => 'required|string|max:50',
-            'sks' => 'required|string|max:50',
-            'jurusan_id' => 'required|integer|exists:jurusan,id',
+            'nama' => 'string|max:255',
+            'kode' => 'string|max:50|unique:ruangan',
+            'kapasitas' => 'string|max:50',
+
         ]);
         $dosen = new M_ruangan();
         $dosen->nama = $request->nama;
         $dosen->kode = $request->kode;
-        $dosen->semester = $request->semester;
-        $dosen->sks = $request->sks;
-        $dosen->jurusan_id = $request->jurusan_id;
+        $dosen->kapasitas = $request->kapasitas;
         $dosen->save();
 
         // Jika penyimpanan berhasil, kembalikan respons berhasil
-        return redirect()->route('matkul')->with('success', 'Data Ruangan ' . $request->nama . ' berhasil ditambahkan');
+        return redirect()->route('ruangan')->with('success', 'Data Ruangan ' . $request->nama . ' berhasil ditambahkan');
     }
     // controller
     public function edit($id)
     {
         $title = 'Master Ruangan';
-        $matkul = M_ruangan::findOrFail($id);
-        return view('admin.ruangan.edit', compact('title', 'matkul'));
+        $ruangan = M_ruangan::findOrFail($id);
+        return view('admin.ruangan.edit', compact('title', 'ruangan'));
     }
 
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'nama' => 'required|string|max:255',
-            'kode' => 'required|string|max:50',
-            'semester' => 'required|string|max:50',
-            'sks' => 'required|string|max:50',
-            'jurusan_id' => 'required|integer|exists:jurusan,id',
+            'nama' => 'string|max:255',
+            'kode' => 'string|max:50',
+            'kapasitas' => 'string|max:50',
         ]);
 
-        $matkul = M_ruangan::findOrFail($id);
-        if ($request->kode !== $matkul->kode) {
+        $ruangan = M_ruangan::findOrFail($id);
+        if ($request->kode !== $ruangan->kode) {
             $request->validate([
                 'id' => 'unique:ruangan,id,' . $id,
             ]);
         }
-        $matkul->nama = $request->nama;
-        $matkul->kode = $request->kode;
-        $matkul->semester = $request->semester;
-        $matkul->sks = $request->sks;
-        $matkul->jurusan_id = $request->jurusan_id;
-        $matkul->save();
-        return redirect()->route('matkul')->with('success', 'Data Ruangan berhasil diperbarui.');
+        $ruangan->nama = $request->nama;
+        $ruangan->kode = $request->kode;
+        $ruangan->kapasitas = $request->kapasitas;
+        $ruangan->save();
+        return redirect()->route('ruangan')->with('success', 'Data Ruangan berhasil diperbarui.');
     }
     public function delete($id)
     {
         // Temukan guru berdasarkan ID
-        $matkul = M_ruangan::findOrFail($id);
+        $ruangan = M_ruangan::findOrFail($id);
         // Hapus guru
-        $matkul->delete();
+        $ruangan->delete();
         // Simpan pesan berhasil ke dalam session
-        return redirect()->back()->with('success', 'Data Ruangan ' . $matkul->nama . ' berhasil dihapus');
+        return redirect()->back()->with('success', 'Data Ruangan ' . $ruangan->nama . ' berhasil dihapus');
     }
 }

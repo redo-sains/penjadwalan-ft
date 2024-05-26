@@ -44,15 +44,11 @@
                       @endif
                       <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                           href="{{ route('jurusan') }}">
-                          <svg class="w-5 h-5" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
-                              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                              <g id="SVGRepo_iconCarrier">
-                                  <title>door</title>
-                                  <path
-                                      d="M30 29.25h-3.279v-27.25c-0-0.414-0.336-0.75-0.75-0.75h-19.971c-0.414 0-0.75 0.336-0.75 0.75v0 27.25h-3.25c-0.414 0-0.75 0.336-0.75 0.75s0.336 0.75 0.75 0.75v0h28c0.414 0 0.75-0.336 0.75-0.75s-0.336-0.75-0.75-0.75v0zM6.75 29.25v-26.5h18.471v26.5zM20.48 15.46c-0.146 0.135-0.238 0.326-0.24 0.54v0c0 0.001-0 0.003-0 0.005 0 0.212 0.093 0.403 0.24 0.535l0.001 0.001c0.126 0.135 0.306 0.22 0.505 0.22 0.005 0 0.010-0 0.015-0h-0.001c0.204-0.001 0.388-0.085 0.519-0.22l0-0c0.142-0.138 0.232-0.328 0.24-0.539l0-0.001c-0.012-0.212-0.102-0.4-0.24-0.54l0 0c-0.136-0.126-0.319-0.203-0.52-0.203s-0.383 0.077-0.52 0.203l0-0z">
-                                  </path>
-                              </g>
+                          <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round"
+                              stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                              <path
+                                  d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z">
+                              </path>
                           </svg>
                           <span class="ml-4  {{ $title === 'Master jurusan' ? 'dark:text-white' : '' }}">Master
                               jurusan</span>
@@ -112,7 +108,7 @@
                                       d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z">
                                   </path>
                               </svg>
-                              <span class="ml-4">Pendataan</span>
+                              <span class="ml-4">Ketersediaan</span>
                           </span>
                           <svg class="w-4 h-4" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
                               <path fill-rule="evenodd"
@@ -125,29 +121,18 @@
                               x-transition:enter-start="opacity-25 max-h-0"
                               x-transition:enter-end="opacity-100 max-h-xl"
                               x-transition:leave="transition-all ease-in-out duration-300"
-                              x-transition:leave-start="opacity-100 max-h-xl" x-transition:leave-end="opacity-0 max-h-0"
+                              x-transition:leave-start="opacity-100 max-h-xl"
+                              x-transition:leave-end="opacity-0 max-h-0"
                               class="p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium text-gray-500 rounded-md shadow-inner bg-gray-50 dark:text-gray-400 dark:bg-gray-900"
                               aria-label="submenu">
                               <li
                                   class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                                  <a class="w-full" href="">Guru pengampu</a>
+                                  <a class="w-full" href="">Ketersediaan Ruangan</a>
                               </li>
                               <li
                                   class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                                  <a class="w-full" href="">
-                                      Periode Akademik
-                                  </a>
-                              </li>
-                              <li
-                                  class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                                  <a class="w-full" href="">
-                                      Hari
-                                  </a>
-                              </li>
-                              <li
-                                  class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                                  <a class="w-full" href="">
-                                      Jam
+                                  <a class="w-full" href="{{ route('k_dosen') }}">
+                                      Ketersediaan Dosen
                                   </a>
                               </li>
 

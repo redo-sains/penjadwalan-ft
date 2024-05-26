@@ -5,12 +5,8 @@
         <main class="h-full pb-16 overflow-y-auto">
             <div class="container px-6 mx-auto grid">
                 <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                    Forms
+                          Edit Jurusan {{ $jurusan->nama }}
                 </h2>
-                <!-- Inputs with icons -->
-                <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
-                    Edit Jurusan {{ $jurusan->nama }}
-                </h4>
                 <form class="grid grid-cols-2" action="{{ route('update_jurusan', $jurusan->id) }}" method="POST">
                     @csrf
                     @method('PUT')

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller_auth;
 use App\Http\Controllers\Controller_dashboard;
 use App\Http\Controllers\Controller_dosen;
 use App\Http\Controllers\Controller_jurusan;
+use App\Http\Controllers\Controller_ketersediaan_dosen;
 use App\Http\Controllers\Controller_mata_kuliah;
 use App\Http\Controllers\Controller_ruangan;
 
@@ -51,3 +52,9 @@ Route::delete('/ruangan-delete/{id}', [Controller_ruangan::class, 'delete'])->na
 Route::get('/ruangan/{id}/edit', [Controller_ruangan::class, 'edit'])->name('edit_ruangan');
 Route::put('/ruangan/{id}', [Controller_ruangan::class, 'update'])->name('update_ruangan');
 Route::post('/ruangan/tambah', [Controller_ruangan::class, 'create'])->name('store_ruangan');
+// routes ketersediaan dosen
+Route::get('/ketersediaan-dosen', [Controller_ketersediaan_dosen::class, 'show'])->name('k_dosen');
+Route::delete('/ketersediaan-dosen-delete/{id}', [Controller_ketersediaan_dosen::class, 'delete'])->name('hapus_k_dosen');
+Route::get('/ketersediaan-dosen/{id}/edit', [Controller_ketersediaan_dosen::class, 'edit'])->name('edit_k_dosen');
+Route::put('/ketersediaan-dosen/{id}', [Controller_ketersediaan_dosen::class, 'update'])->name('update_k_dosen');
+Route::post('/ketersediaan-dosen/tambah', [Controller_ketersediaan_dosen::class, 'create'])->name('store_k_dosen');

@@ -5,12 +5,7 @@
         <main class="h-full pb-16 overflow-y-auto">
             <div class="container px-6 mx-auto grid">
                 <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                    Forms
-                </h2>
-                <!-- Inputs with icons -->
-                <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
-                    Edit matkul {{ $matkul->nama }}
-                </h4>
+                        Edit matkul {{ $matkul->nama }}     </h2>
                 <?php
                 $jurusan_id = $matkul->jurusan_id;
                 ?>
