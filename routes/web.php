@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller_auth;
 use App\Http\Controllers\Controller_dashboard;
 use App\Http\Controllers\Controller_dosen;
 use App\Http\Controllers\Controller_jurusan;
+use App\Http\Controllers\Controller_kelas;
 use App\Http\Controllers\Controller_ketersediaan_dosen;
 use App\Http\Controllers\Controller_mata_kuliah;
 use App\Http\Controllers\Controller_ruangan;
@@ -63,3 +64,9 @@ Route::delete('/user-delete/{id}', [Controller_users::class, 'delete'])->name('h
 Route::get('/user/{id}/edit', [Controller_users::class, 'edit'])->name('edit_user');
 Route::put('/user/{id}', [Controller_users::class, 'update'])->name('update_user');
 Route::post('/user/tambah', [Controller_users::class, 'create'])->name('store_user');
+// routes kelas
+Route::get('/kelas', [Controller_kelas::class, 'show'])->name('kelas');
+Route::post('/kelas/tambah', [Controller_kelas::class, 'create'])->name('store_kelas');
+Route::delete('/kelas-delete/{id}', [Controller_kelas::class, 'delete'])->name('hapus_kelas');
+Route::get('/kelas/{id}/edit', [Controller_kelas::class, 'edit'])->name('edit_kelas');
+Route::put('/kelas/{id}', [Controller_kelas::class, 'update'])->name('update_kelas');
