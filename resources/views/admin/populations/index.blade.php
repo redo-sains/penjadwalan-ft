@@ -6,14 +6,22 @@
             <div class="container grid px-6 mx-auto">
                 <div class="flex items-center justify-between">
                     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                        Master Kelas
+                        Population
                     </h2>
-
-
-                    <button @click="openModal"
-                        class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-                        Tambah Kelas
-                    </button>
+                    <div class="flex ">
+                        <button @click="openModal"
+                            class="px-4 mr-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                            Tambah Gen
+                        </button>
+                        <form method="POST" action="{{ route('generate-population') }}">
+                            @csrf
+                            @method('POST')
+                            <button
+                                class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                                Generate Populasi
+                            </button>
+                        </form>
+                    </div>
                 </div>
                 <!-- With actions -->
                 <div class="w-full overflow-hidden rounded-lg shadow-xs">
@@ -22,38 +30,74 @@
                             <thead>
                                 <tr
                                     class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+                                    <th class="px-4 py-3">Dosen</th>
                                     <th class="px-4 py-3">Jurusan</th>
                                     <th class="px-4 py-3">Mata Kuliah</th>
-                                    <th class="px-4 py-3">Dosen</th>
-                                    <th class="px-4 py-3">Kelas</th>
-                                    <th class="px-4 py-3">Kapasitas</th>
+                                    <th class="px-4 py-3">Ruangan</th>
+                                    <th class="px-4 py-3">Hari</th>
+                                    <th class="px-4 py-3">Waktu mulai</th>
+                                    <th class="px-4 py-3">Waktu selesai</th>
                                     <th class="px-4 py-3">Actions</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                                @foreach ($kelases as $kelas)
+                                @foreach ($populations as $population)
                                     <tr class="text-gray-700 dark:text-gray-400">
+                                        <td class="px-4 py-3 text-sm">
+                                            {{ $population->dosen->nama }}
+                                        </td>
                                         <td class="px-4 py-3">
                                             <div>
-                                                <p class="font-semibold">{{ $kelas->jurusan->nama }}</p>
+                                                <p class="font-semibold">{{ $population->jurusan->nama }}</p>
                                             </div>
                                         </td>
                                         <td class="px-4 py-3 text-sm">
-                                            {{ $kelas->mataKuliah->nama }}
+                                            {{ $population->mataKuliah->nama }}
                                         </td>
-                                        <td class="px-4 py-3 text-sm">
-                                            {{ $kelas->dosen->nama }}
+                                    
+                                        <td>
+                                            @if (isset($population->ruangan->nama) && $population->ruangan->nama)
+                                                {{ $population->ruangan->nama }}
+                                            @else
+                                                <span
+                                                    class="px-2 py-1 font-semibold leading-tight text-orange-700 bg-orange-100 rounded-full dark:text-white dark:bg-orange-600">
+                                                    Null
+                                                </span>
+                                            @endif
                                         </td>
-
-                                        <td class="px-4 py-3 text-sm">
-                                            {{ $kelas->kelas }}
+                                        <td>
+                                            @if (isset($population->hari) && $population->hari)
+                                                {{ $population->hari }}
+                                            @else
+                                                <span
+                                                    class="px-2 py-1 font-semibold leading-tight text-orange-700 bg-orange-100 rounded-full dark:text-white dark:bg-orange-600">
+                                                    Null
+                                                </span>
+                                            @endif
                                         </td>
-                                        <td class="px-4 py-3 text-sm">
-                                            {{ $kelas->kapasitas }}
+                                        <td>
+                                            @if (isset($population->waktu_mulai) && $population->waktu_mulai)
+                                                {{ $population->waktu_mulai }}
+                                            @else
+                                                <span
+                                                    class="px-2 py-1 font-semibold leading-tight text-orange-700 bg-orange-100 rounded-full dark:text-white dark:bg-orange-600">
+                                                    Null
+                                                </span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if (isset($population->waktu_selesai) && $population->waktu_selesai)
+                                                {{ $population->waktu_selesai }}
+                                            @else
+                                                <span
+                                                    class="px-2 py-1 font-semibold leading-tight text-orange-700 bg-orange-100 rounded-full dark:text-white dark:bg-orange-600">
+                                                    Null
+                                                </span>
+                                            @endif
                                         </td>
                                         <td class="px-4 py-3">
                                             <div class="flex items-center space-x-4 text-sm">
-                                                <a href="{{ route('edit_kelas', ['id' => $kelas->id]) }}"
+                                                <a href="{{ route('edit_population', ['id' => $population->id]) }}"
                                                     class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                                                     aria-label="Edit">
                                                     <svg class="w-5 h-5" aria-hidden="true" fill="currentColor"
@@ -63,7 +107,7 @@
                                                         </path>
                                                     </svg>
                                                 </a>
-                                                <form action="{{ route('hapus_kelas', ['id' => $kelas->id]) }}"
+                                                <form action="{{ route('hapus_population', ['id' => $population->id]) }}"
                                                     method="post">
                                                     @csrf
                                                     @method('DELETE')
@@ -90,12 +134,13 @@
                     <div
                         class="flex px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
                         <span class="flex items-center  col-span-3">
-                            Showing {{ $kelases->firstItem() }}-{{ $kelases->lastItem() }} of {{ $kelases->total() }}
+                            Showing {{ $populations->firstItem() }}-{{ $populations->lastItem() }} of
+                            {{ $populations->total() }}
                         </span>
                         <div
                             class="flex px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
                             <span class="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
-                                {{ $kelases->links() }}
+                                {{ $populations->links() }}
                             </span>
                         </div>
 
@@ -103,7 +148,7 @@
                 </div>
             </div>
         </main>
-        <!-- Modal tambah hari-->
+        <!-- Modal tambah pipuulation-->
         <div x-show="isModalOpen" x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0"
             x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-150"
             x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
@@ -132,25 +177,25 @@
                 <div class="mt-4 mb-6">
                     <!-- Modal title -->
                     <p class="mb-2 px-3 text-lg font-semibold text-gray-700 dark:text-gray-300  ">
-                        Tambah Kelas Baru
+                        Tambah population Baru
                     </p>
                     <!-- Modal description -->
-                    <form class="grid grid-cols-2" action="{{ route('store_kelas') }}" method="POST">
+                    <form class="grid grid-cols-2" action="{{ route('store_population') }}" method="POST">
                         @csrf
+                        @method('POST')
                         <div class="px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
                             <label class="block text-sm">
-                                <span class="text-gray-700 dark:text-gray-400">Jurusan</span>
+                                <span class="text-gray-700 dark:text-gray-400">Dosen</span>
                                 <div
                                     class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
-                                    <select name="jurusan_id"
+                                    <select name="dosen_id"
                                         class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-select">
-                                        <option value="#" selected disabled>Pilih jurusan</option>
-                                        @foreach ($jurusans as $jurusan)
-                                            <option value="{{ $jurusan->id }}" class="">
-                                                {{ $jurusan->nama }}</option>
+                                        <option value="#" selected disabled>Pilih dosen</option>
+                                        @foreach ($dosens as $dosen)
+                                            <option value="{{ $dosen->id }}" class="">
+                                                {{ $dosen->nama }}</option>
                                         @endforeach
                                     </select>
-
                                     <div class="absolute inset-y-0 flex items-center ml-3 pointer-events-none">
                                         <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round"
                                             stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"
@@ -190,15 +235,41 @@
                         </div>
                         <div class="px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
                             <label class="block text-sm">
-                                <span class="text-gray-700 dark:text-gray-400">Dosen</span>
+                                <span class="text-gray-700 dark:text-gray-400">Jurusan</span>
                                 <div
                                     class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
-                                    <select name="dosen_id"
+                                    <select name="jurusan_id"
                                         class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-select">
-                                        <option value="#" selected disabled>Pilih dosen</option>
-                                        @foreach ($dosens as $dosen)
-                                            <option value="{{ $dosen->id }}" class="">
-                                                {{ $dosen->nama }}</option>
+                                        <option value="#" selected disabled>Pilih jurusan</option>
+                                        @foreach ($jurusans as $jurusan)
+                                            <option value="{{ $jurusan->id }}" class="">
+                                                {{ $jurusan->nama }}</option>
+                                        @endforeach
+                                    </select>
+
+                                    <div class="absolute inset-y-0 flex items-center ml-3 pointer-events-none">
+                                        <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round"
+                                            stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path
+                                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                        {{-- <div class="px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                            <label class="block text-sm">
+                                <span class="text-gray-700 dark:text-gray-400">Ruangan</span>
+                                <div
+                                    class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
+                                    <select name="ruangan_id"
+                                        class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-select">
+                                        <option value="#" selected disabled>Pilih Ruangan</option>
+                                        @foreach ($ruangans as $ruangan)
+                                            <option value="{{ $ruangan->id }}" class="">
+                                                {{ $ruangan->nama }}</option>
                                         @endforeach
                                     </select>
                                     <div class="absolute inset-y-0 flex items-center ml-3 pointer-events-none">
@@ -212,47 +283,8 @@
                                     </div>
                                 </div>
                             </label>
-                        </div>
-                        <div class="px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
-                            <label class="block text-sm">
-                                <span class="text-gray-700 dark:text-gray-400">Kelas</span>
-                                <div
-                                    class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
-                                    <input name="kelas"
-                                        class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
-                                        placeholder="masukan  kelas" />
-                                    <div class="absolute inset-y-0 flex items-center ml-3 pointer-events-none">
-                                        <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round"
-                                            stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"
-                                            stroke="currentColor">
-                                            <path
-                                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
-                                            </path>
-                                        </svg>
-                                    </div>
-                                </div>
-                            </label>
-                        </div>
-                        <div class="px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
-                            <label class="block text-sm">
-                                <span class="text-gray-700 dark:text-gray-400">Kapasitas</span>
-                                <div
-                                    class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
-                                    <input type="number" name="kapasitas"
-                                        class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
-                                        placeholder="masukan  kapasitas" />
-                                    <div class="absolute inset-y-0 flex items-center ml-3 pointer-events-none">
-                                        <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round"
-                                            stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"
-                                            stroke="currentColor">
-                                            <path
-                                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
-                                            </path>
-                                        </svg>
-                                    </div>
-                                </div>
-                            </label>
-                        </div>
+                        </div> --}}
+
                         <button type="submit"
                             class="flex items-center justify-center mt-2  py-3 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple">Simpan</button>
                     </form>

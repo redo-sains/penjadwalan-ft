@@ -12,7 +12,7 @@ class Controller_mata_kuliah extends Controller
     public function show()
     {
         $title = 'Master Mata Kuliah';
-        $matakuls = M_mata_kuliah::paginate(5);
+        $matakuls = M_mata_kuliah::paginate(8);
         $jurusans = M_jurusan::all();
         return view('admin.mata_kuliah.index', compact('matakuls', 'title', 'jurusans'));
     }

@@ -12,6 +12,6 @@ class M_dosen extends Model
     protected $primaryKey = 'id';
     public $timestamps = true;
     protected $fillable = [
-        'nama', 'kode', 'jurusan_id'
+        'nama', 'kode', 'jurusan_id' , 'tersedia'
     ];
 }

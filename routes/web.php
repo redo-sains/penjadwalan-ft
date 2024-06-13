@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller_jurusan;
 use App\Http\Controllers\Controller_kelas;
 use App\Http\Controllers\Controller_ketersediaan_dosen;
 use App\Http\Controllers\Controller_mata_kuliah;
+use App\Http\Controllers\Controller_populations;
 use App\Http\Controllers\Controller_ruangan;
 use App\Http\Controllers\Controller_users;
 
@@ -70,3 +71,14 @@ Route::post('/kelas/tambah', [Controller_kelas::class, 'create'])->name('store_k
 Route::delete('/kelas-delete/{id}', [Controller_kelas::class, 'delete'])->name('hapus_kelas');
 Route::get('/kelas/{id}/edit', [Controller_kelas::class, 'edit'])->name('edit_kelas');
 Route::put('/kelas/{id}', [Controller_kelas::class, 'update'])->name('update_kelas');
+// routes populations
+Route::get('/population', [Controller_populations::class, 'show'])->name('population');
+Route::post('/population/tambah', [Controller_populations::class, 'create'])->name('store_population');
+Route::delete('/population-delete/{id}', [Controller_populations::class, 'delete'])->name('hapus_population');
+Route::get('/population/{id}/edit', [Controller_populations::class, 'edit'])->name('edit_population');
+Route::put('/population/{id}', [Controller_populations::class, 'update'])->name('update_population');
+
+// generate data
+Route::post('/population-generate', [Controller_populations::class, 'generate'])->name('generate-population');
+Route::post('/save-schedules', [Controller_populations::class, 'saveSchedules'])->name('saveSchedules');
+

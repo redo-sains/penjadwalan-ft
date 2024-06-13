@@ -41,7 +41,6 @@ class Controller_kelas extends Controller
         $matkuls = M_mata_kuliah::all();
         return view('admin.kelas.edit', compact('title', 'kelas', 'jurusans', 'matkuls', 'matkuls', 'dosens'));
     }
-
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([

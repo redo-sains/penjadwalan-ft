@@ -130,7 +130,7 @@
                                       d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z">
                                   </path>
                               </svg>
-                              <span class="ml-4">Ketersediaan</span>
+                              <span class="ml-4">Generate data</span>
                           </span>
                           <svg class="w-4 h-4" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
                               <path fill-rule="evenodd"
@@ -147,6 +147,12 @@
                               x-transition:leave-end="opacity-0 max-h-0"
                               class="p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium text-gray-500 rounded-md shadow-inner bg-gray-50 dark:text-gray-400 dark:bg-gray-900"
                               aria-label="submenu">
+                               <li
+                                  class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
+                                  <a class="w-full" href="{{ route('population') }}">
+                                      Populations
+                                  </a>
+                              </li>
                               <li
                                   class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
                                   <a class="w-full" href="">Ketersediaan Ruangan</a>
@@ -158,6 +164,7 @@
                                   </a>
                               </li>
 
+                             
                               <li
                                   class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
                                   <a class="w-full" href="pages/create-account.html">

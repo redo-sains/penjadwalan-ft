@@ -13,6 +13,7 @@ class CreateDosenTable extends Migration
             $table->string('nama', 100);
             $table->string('kode', 100)->unique();
             $table->foreignId('jurusan_id')->constrained('jurusan')->onDelete('cascade');
+            $table->boolean('tersedia');
             $table->timestamps();
         });
     }

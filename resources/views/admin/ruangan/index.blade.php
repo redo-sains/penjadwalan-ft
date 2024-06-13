@@ -26,6 +26,7 @@
                                     <th class="px-4 py-3">Ruangan</th>
                                     <th class="px-4 py-3">Kapasitas</th>
                                     <th class="px-4 py-3">Kode Ruangan</th>
+                                    <th class="px-4 py-3">Tipe Ruangan</th>
                                     <th class="px-4 py-3">Actions</th>
                                 </tr>
                             </thead>
@@ -51,6 +52,12 @@
                                             <span
                                                 class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
                                                 {{ $Ruangan->kode }}
+                                            </span>
+                                        </td>
+                                        <td class="px-4 py-3 text-xs">
+                                            <span
+                                                    class="px-2 py-1 font-semibold leading-tight text-orange-700 bg-orange-100 rounded-full dark:text-white dark:bg-orange-600">
+                                                {{ $Ruangan->tipe_ruangan }}
                                             </span>
                                         </td>
                                         <td class="px-4 py-3">
@@ -135,19 +142,18 @@
                     <!-- Modal title -->
                     <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300  ">
                         Tambah Ruangan
-                    </p>        
+                    </p>
                     <!-- Modal description -->
                     <form class="grid grid-cols-2" action="{{ route('store_ruangan') }}" method="POST">
                         @csrf
                         <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
                             <label class="block text-sm">
                                 <span class="text-gray-700 dark:text-gray-400">Nama</span>
-                                <!-- focus-within sets the color for the icon when input is focused -->
                                 <div
                                     class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
                                     <input name="nama"
                                         class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
-                                        placeholder="masukan nama Ruangan" />
+                                        placeholder="masukan nama Ruangan" required />
                                     <div class="absolute inset-y-0 flex items-center ml-3 pointer-events-none">
                                         <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round"
                                             stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"
@@ -162,13 +168,12 @@
                         </div>
                         <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
                             <label class="block text-sm">
-                                <span class="text-gray-700 dark:text-gray-400">kode Ruangan</span>
-                                <!-- focus-within sets the color for the icon when input is focused -->
+                                <span class="text-gray-700 dark:text-gray-400">Kode Ruangan</span>
                                 <div
                                     class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
                                     <input name="kode"
                                         class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
-                                        placeholder="masukan kode Ruangan" />
+                                        placeholder="masukan kode Ruangan" required />
                                     <div class="absolute inset-y-0 flex items-center ml-3 pointer-events-none">
                                         <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round"
                                             stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"
@@ -184,12 +189,60 @@
                         <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
                             <label class="block text-sm">
                                 <span class="text-gray-700 dark:text-gray-400">Kapasitas</span>
-                                <!-- focus-within sets the color for the icon when input is focused -->
                                 <div
                                     class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
                                     <input type="number" name="kapasitas"
                                         class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
-                                        placeholder="masukan Kapasitas" />
+                                        placeholder="masukan Kapasitas" required />
+                                    <div class="absolute inset-y-0 flex items-center ml-3 pointer-events-none">
+                                        <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round"
+                                            stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path
+                                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                            <label class="block text-sm">
+                                <span class="text-gray-700 dark:text-gray-400">Tipe Ruangan</span>
+                                <div
+                                    class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
+                                    <select name="tipe_ruangan"
+                                        class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-select"
+                                        required>
+                                        <option value="umum">Umum</option>
+                                        <option value="online">Online</option>
+                                        <option value="khusus">Khusus</option>
+                                    </select>
+                                    <div class="absolute inset-y-0 flex items-center ml-3 pointer-events-none">
+                                        <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round"
+                                            stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path
+                                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                            <label class="block text-sm">
+                                <span class="text-gray-700 dark:text-gray-400">Jurusan (hanya untuk ruangan khusus)</span>
+                                <div
+                                    class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
+                                    <select name="jurusan_id" id="jurusan_id"
+                                        class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-select"
+                                        disabled>
+                                        <option value="">Pilih Jurusan</option>
+                                        @foreach ($jurusan as $j)
+                                            <option value="{{ $j->id }}">{{ $j->nama }}</option>
+                                        @endforeach
+                                    </select>
                                     <div class="absolute inset-y-0 flex items-center ml-3 pointer-events-none">
                                         <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round"
                                             stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"
@@ -205,6 +258,8 @@
                         <button type="submit"
                             class="flex items-center justify-center p-3 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple">Simpan</button>
                     </form>
+
+
                 </div>
 
 
@@ -212,4 +267,19 @@
         </div>
         <!-- End of modal update hari  -->
     </div>
+
+    <script>
+        // JavaScript untuk mengaktifkan/menonaktifkan dropdown jurusan berdasarkan tipe ruangan
+        document.querySelector('select[name="tipe_ruangan"]').addEventListener('change', function() {
+            const jurusanSelect = document.querySelector('select[name="jurusan_id"]');
+            if (this.value === 'khusus') {
+                jurusanSelect.disabled = false;
+                jurusanSelect.required = true;
+            } else {
+                jurusanSelect.disabled = true;
+                jurusanSelect.required = false;
+                jurusanSelect.value = ''; // Reset value
+            }
+        });
+    </script>
 @endsection
