@@ -11,7 +11,7 @@ class M_Populations extends Model
     use HasFactory;
     protected $table = 'populations';
     protected $primaryKey = 'id';
-    protected $fillable = ['jurusan_id', 'matkul_id', 'dosen_id', 'ruangan_id', 'kapasitas', 'hari', 'waktu_mulai', 'waktu_selesai', 'kurikulum'];
+    protected $fillable = ['jurusan_id', 'matkul_id', 'dosen_id', 'ruangan_id', 'kapasitas', 'hari', 'waktu_mulai', 'waktu_selesai', 'kurikulum_id'];
     public $timestamps;
 
     public function jurusan(): BelongsTo

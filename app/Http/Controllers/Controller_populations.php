@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\M_dosen;
 use App\Models\M_jurusan;
-use App\Models\M_kelas;
+use App\Models\M_kurikulum;
 use App\Models\M_mata_kuliah;
 use App\Models\M_Populations;
 use App\Models\M_ruangan;
@@ -21,7 +21,8 @@ class Controller_populations extends Controller
         $dosens = M_dosen::all();
         $matkuls = M_mata_kuliah::all();
         $ruangans = M_ruangan::all();
-        return view('admin.populations.index', compact('populations', 'title', 'jurusans', 'dosens', 'matkuls', 'ruangans'));
+        $kurikulums = M_kurikulum::all();
+        return view('admin.populations.index', compact('populations', 'title', 'jurusans', 'dosens', 'matkuls', 'ruangans', 'kurikulums'));
     }
     public function create(Request $request)
     {
@@ -29,7 +30,6 @@ class Controller_populations extends Controller
             'jurusan_id' => 'required|string',
             'matkul_id' => 'required|string',
             'dosen_id' => 'required|string',
-            // 'ruangan_id' => 'required|string',
         ]);
         M_Populations::create($validatedData);
         return redirect()->route('population')->with('success', 'Data Gen berhasil ditambahkan');
@@ -165,13 +165,14 @@ class Controller_populations extends Controller
         $dosens = M_dosen::all();
         $matkuls = M_mata_kuliah::all();
         $ruangans = M_ruangan::all();
-        return view('admin.populations.generate', compact('populations', 'title', 'jurusans', 'dosens', 'matkuls', 'ruangans', 'sortedSchedules', 'generatedScheduleIds'));
+        $kurikulums = M_kurikulum::all();
+        return view('admin.populations.generate', compact('populations', 'title', 'jurusans', 'dosens', 'matkuls', 'ruangans', 'sortedSchedules', 'generatedScheduleIds', 'kurikulums'));
     }
     public function saveSchedules(Request $request)
     {
         // Ambil data sortedSchedules dari request
         $sortedSchedules = json_decode($request->input('sortedSchedules'), true);
-        // dd($sortedSchedules);
+        $kurikulum_id = $request->input('kurikulum_id');
         // Update tabel population berdasarkan sortedSchedules
         foreach ($sortedSchedules as $schedule) {
             $population = M_Populations::where([
@@ -179,17 +180,16 @@ class Controller_populations extends Controller
                 'matkul_id' => $schedule['matkul_id'],
                 'dosen_id' => $schedule['dosen_id']
             ])->first();
-
             if ($population) {
                 $population->update([
                     'ruangan_id' => $schedule['ruangan_id'],
                     'hari' => $schedule['hari'],
                     'waktu_mulai' => $schedule['waktu_mulai'],
                     'waktu_selesai' => $schedule['waktu_selesai'],
+                    'kurikulum_id' => $kurikulum_id,
                 ]);
             }
         }
-
         return redirect()->route('population')->with('success', 'Jadwal berhasil disimpan.');
     }
 }

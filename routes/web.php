@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller_dosen;
 use App\Http\Controllers\Controller_jurusan;
 use App\Http\Controllers\Controller_kelas;
 use App\Http\Controllers\Controller_ketersediaan_dosen;
+use App\Http\Controllers\Controller_kurikulum;
 use App\Http\Controllers\Controller_mata_kuliah;
 use App\Http\Controllers\Controller_populations;
 use App\Http\Controllers\Controller_ruangan;
@@ -77,7 +78,14 @@ Route::post('/population/tambah', [Controller_populations::class, 'create'])->na
 Route::delete('/population-delete/{id}', [Controller_populations::class, 'delete'])->name('hapus_population');
 Route::get('/population/{id}/edit', [Controller_populations::class, 'edit'])->name('edit_population');
 Route::put('/population/{id}', [Controller_populations::class, 'update'])->name('update_population');
+// routes kurikulum
+Route::get('/kurikulum', [Controller_kurikulum::class, 'show'])->name('kurikulum');
+Route::post('/kurikulum/tambah', [Controller_kurikulum::class, 'create'])->name('store_kurikulum');
+Route::delete('/kurikulum-delete/{id}', [Controller_kurikulum::class, 'delete'])->name('hapus_kurikulum');
+Route::get('/kurikulum/{id}/edit', [Controller_kurikulum::class, 'edit'])->name('edit_kurikulum');
+Route::put('/kurikulum/{id}', [Controller_kurikulum::class, 'update'])->name('update_kurikulum');
 
+Route::post('/kurikulum/periode', [Controller_kurikulum::class, 'select_periode'])->name('kurikum-periode');
 // generate data
 Route::post('/population-generate', [Controller_populations::class, 'generate'])->name('generate-population');
 Route::post('/save-schedules', [Controller_populations::class, 'saveSchedules'])->name('saveSchedules');
