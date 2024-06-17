@@ -13,7 +13,7 @@
                         <form method="POST" action="{{ route('saveSchedules') }}">
                             @csrf
                             @method('POST')
-                            <div class="px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                            {{-- <div class="px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
                                 <label class="block text-sm">
                                     <span class="text-gray-700 dark:text-gray-400">Kurikulum</span>
                                     <div
@@ -38,7 +38,7 @@
                                         </div>
                                     </div>
                                 </label>
-                            </div>
+                            </div> --}}
                             <input type="hidden" name="sortedSchedules" value="{{ json_encode($generatedScheduleIds) }}">
                             <button
                                 class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">

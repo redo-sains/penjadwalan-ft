@@ -53,17 +53,19 @@ class Controller_kurikulum extends Controller
     public function select_periode(Request $request)
     {
         $validatedData = $request->validate([
-            'kurikulum' => 'required'
+            'kurikulum_id' => 'required'
         ]);
+        $id = $request->kurikulum_id;
         $kurikulums = M_kurikulum::all();
-        $id = $validatedData['kurikulum'];
         $populations = M_Populations::where('kurikulum_id', $id)->paginate(8);
         $jurusans = M_jurusan::all();
         $dosens = M_dosen::all();
         $matkuls = M_mata_kuliah::all();
         $ruangans = M_ruangan::all();
         $kurikulums = M_kurikulum::all();
-        $title = "Halaman kurikulum";
-        return view('admin.populations.index', compact('populations', 'title', 'jurusans', 'dosens', 'matkuls', 'ruangans', 'kurikulums'));
+        $title = "Halaman Populasi";
+
+        // dd($kurikulums);
+        return view('admin.populations.index', compact('populations', 'title', 'jurusans', 'dosens', 'matkuls', 'ruangans', 'kurikulums', 'id'));
     }
 }

@@ -13,8 +13,25 @@ use Illuminate\Http\Request;
 class Controller_populations extends Controller
 {
     //
-    public function show()
+    public function show(Request $request)
     {
+        if (isset($request->kurikulum_id)) {
+            $validatedData = $request->validate([
+                'kurikulum_id' => 'required'
+            ]);
+            $id = $request->kurikulum_id;
+            $kurikulums = M_kurikulum::all();
+            $populations = M_Populations::where('kurikulum_id', $id)->paginate(8);
+            $jurusans = M_jurusan::all();
+            $dosens = M_dosen::all();
+            $matkuls = M_mata_kuliah::all();
+            $ruangans = M_ruangan::all();
+            // $kurikulums = M_kurikulum::all();
+            $title = "Halaman Populasi";
+
+            return view('admin.populations.index', compact('populations', 'title', 'jurusans', 'dosens', 'matkuls', 'ruangans', 'kurikulums', 'id'));
+        }
+
         $title = 'Populations';
         $populations = M_Populations::with(['jurusan', 'mataKuliah', 'dosen', 'ruangan'])->paginate(10);
         $jurusans = M_jurusan::all();
@@ -22,17 +39,25 @@ class Controller_populations extends Controller
         $matkuls = M_mata_kuliah::all();
         $ruangans = M_ruangan::all();
         $kurikulums = M_kurikulum::all();
+
+        // dd("test");
         return view('admin.populations.index', compact('populations', 'title', 'jurusans', 'dosens', 'matkuls', 'ruangans', 'kurikulums'));
     }
     public function create(Request $request)
     {
+
         $validatedData = $request->validate([
             'jurusan_id' => 'required|string',
             'matkul_id' => 'required|string',
             'dosen_id' => 'required|string',
+            'kurikulum_id' => 'required'
         ]);
+        $id = $request->kurikulum_id;
         M_Populations::create($validatedData);
-        return redirect()->route('population')->with('success', 'Data Gen berhasil ditambahkan');
+        return redirect()->route('population')->with([
+            'success' => 'Data Gen berhasil ditambahkan',
+            'kurikulum_id' => $id
+        ]);
     }
     // controller
     public function edit($id)
@@ -65,10 +90,16 @@ class Controller_populations extends Controller
         // Simpan pesan berhasil ke dalam session
         return redirect()->back()->with('success', 'Data gen telah dihapus');
     }
-    public function generate()
+    public function generate(Request $request)
     {
-        // Ambil semua populasi dan ruangan
-        $populations = M_Populations::all();
+        $kurikulum_id = $request->kurikulum_id;
+
+        if (isset($kurikulum_id)) {
+            $populations = M_Populations::where('kurikulum_id', $kurikulum_id)->get();
+        } else {
+            // Jika tidak ada kurikulum_id, ambil semua populasi
+            $populations = M_Populations::all();
+        }
         $rooms = M_ruangan::all()->toArray();
         // Konversi ke array
         $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
@@ -121,6 +152,7 @@ class Controller_populations extends Controller
                                     'hari' => $day,
                                     'waktu_mulai' => $time[0],
                                     'waktu_selesai' => $time[1],
+                                    'kurikulum_id' => $kurikulum_id
                                 ];
                                 $generatePopulasi[] = [
                                     'id' => $population->id,
@@ -131,6 +163,7 @@ class Controller_populations extends Controller
                                     'hari' => $day,
                                     'waktu_mulai' => $time[0],
                                     'waktu_selesai' => $time[1],
+                                    'kurikulum_id' => $kurikulum_id
                                 ];
 
                                 break 3; // Keluar dari loop setelah menemukan slot
@@ -172,7 +205,6 @@ class Controller_populations extends Controller
     {
         // Ambil data sortedSchedules dari request
         $sortedSchedules = json_decode($request->input('sortedSchedules'), true);
-        $kurikulum_id = $request->input('kurikulum_id');
         // Update tabel population berdasarkan sortedSchedules
         foreach ($sortedSchedules as $schedule) {
             $population = M_Populations::where([
@@ -186,7 +218,7 @@ class Controller_populations extends Controller
                     'hari' => $schedule['hari'],
                     'waktu_mulai' => $schedule['waktu_mulai'],
                     'waktu_selesai' => $schedule['waktu_selesai'],
-                    'kurikulum_id' => $kurikulum_id,
+                    'kurikulum_id' => $schedule['kurikulum_id'],
                 ]);
             }
         }

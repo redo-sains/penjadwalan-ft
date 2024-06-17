@@ -85,7 +85,7 @@ Route::delete('/kurikulum-delete/{id}', [Controller_kurikulum::class, 'delete'])
 Route::get('/kurikulum/{id}/edit', [Controller_kurikulum::class, 'edit'])->name('edit_kurikulum');
 Route::put('/kurikulum/{id}', [Controller_kurikulum::class, 'update'])->name('update_kurikulum');
 
-Route::post('/kurikulum/periode', [Controller_kurikulum::class, 'select_periode'])->name('kurikum-periode');
+// Route::get('/population/periode', [Controller_kurikulum::class, 'select_periode'])->name('kurikum-periode');
 // generate data
 Route::post('/population-generate', [Controller_populations::class, 'generate'])->name('generate-population');
 Route::post('/save-schedules', [Controller_populations::class, 'saveSchedules'])->name('saveSchedules');
