@@ -38,6 +38,7 @@ class Controller_auth extends Controller
             if ($user->role === 'admin') {
                 return redirect()->route('dashboard')->with('success', 'Login berhasil.');
             } else {
+                return redirect()->route('dashboard-mahasiswa')->with('success', 'Login mahasiswa berhasil.');
                 // Jika tidak, arahkan ke halaman yang sesuai untuk pengguna biasa
                 // return redirect()->intended('beranda');
 

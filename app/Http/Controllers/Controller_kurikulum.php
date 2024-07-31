@@ -24,6 +24,7 @@ class Controller_kurikulum extends Controller
         $dataValidate =    $request->validate([
             'tahun_mulai' => 'required',
             'tahun_selesai' => 'required',
+            'semester' => 'required',
         ]);
         M_kurikulum::create($dataValidate);
         return redirect()->route('kurikulum')->with('success', 'Kurikulum tahun' . $request->tahun_mulai . '/' . $request->tahun_mulai . '');
@@ -39,9 +40,10 @@ class Controller_kurikulum extends Controller
         $kurikulum = M_kurikulum::findOrFail($id);
         $validateData = $request->validate([
             'tahun_mulai' => 'required',
-            'tahun_selesai' => 'required'
+            'tahun_selesai' => 'required',
+            'semester' => 'required',
         ]);
-        $kurikulum->update($validateData);
+       $kurikulum->update($validateData);
         return redirect()->route('kurikulum')->with('success', 'Berhasil melakukan perubahan data');
     }
     public function delete($id)

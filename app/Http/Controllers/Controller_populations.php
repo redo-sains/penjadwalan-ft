@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\Export_Jadwal;
 use App\Models\M_dosen;
 use App\Models\M_jurusan;
 use App\Models\M_kurikulum;
@@ -9,6 +10,7 @@ use App\Models\M_mata_kuliah;
 use App\Models\M_Populations;
 use App\Models\M_ruangan;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class Controller_populations extends Controller
 {
@@ -40,7 +42,6 @@ class Controller_populations extends Controller
         $ruangans = M_ruangan::all();
         $kurikulums = M_kurikulum::all();
 
-        // dd("test");
         return view('admin.populations.index', compact('populations', 'title', 'jurusans', 'dosens', 'matkuls', 'ruangans', 'kurikulums'));
     }
     public function create(Request $request)
@@ -223,5 +224,11 @@ class Controller_populations extends Controller
             }
         }
         return redirect()->route('population')->with('success', 'Jadwal berhasil disimpan.');
+    }
+
+    // download xsxl
+    public function export()
+    {
+        return Excel::download(new Export_Jadwal, 'population.xlsx');
     }
 }

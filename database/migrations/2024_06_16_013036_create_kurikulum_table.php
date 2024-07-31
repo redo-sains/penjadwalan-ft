@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->smallInteger('tahun_mulai')->unsigned();
             $table->smallInteger('tahun_selesai')->unsigned();
+            $table->enum('semester', ['ganjil', 'genap']);
         });
     }
 

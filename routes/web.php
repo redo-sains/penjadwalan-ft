@@ -1,15 +1,18 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Con;
 use App\Http\Controllers\Controller_auth;
 use App\Http\Controllers\Controller_dashboard;
 use App\Http\Controllers\Controller_dosen;
+use App\Http\Controllers\Controller_Export;
+use App\Http\Controllers\Controller_jadwal_kuliah;
 use App\Http\Controllers\Controller_jurusan;
 use App\Http\Controllers\Controller_kelas;
 use App\Http\Controllers\Controller_ketersediaan_dosen;
 use App\Http\Controllers\Controller_kurikulum;
+use App\Http\Controllers\Controller_Mahasiswa;
 use App\Http\Controllers\Controller_mata_kuliah;
+use App\Http\Controllers\Controller_Perhitungan;
 use App\Http\Controllers\Controller_populations;
 use App\Http\Controllers\Controller_ruangan;
 use App\Http\Controllers\Controller_users;
@@ -24,6 +27,7 @@ use App\Http\Controllers\Controller_users;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
 Route::redirect('/', '/login');
 // routes auth
 Route::get('/login', [Controller_auth::class, 'show'])->name('login');
@@ -90,3 +94,13 @@ Route::put('/kurikulum/{id}', [Controller_kurikulum::class, 'update'])->name('up
 Route::post('/population-generate', [Controller_populations::class, 'generate'])->name('generate-population');
 Route::post('/save-schedules', [Controller_populations::class, 'saveSchedules'])->name('saveSchedules');
 
+
+Route::post('/generate-jadwal', [Controller_Perhitungan::class, 'generateSchedule'])->name('generate-jadwal');
+
+// mahasiswa 
+
+Route::get('/mahasiswa/', [Controller_Mahasiswa::class, 'show'])->name('dashboard-mahasiswa');
+Route::post('/population/export', [Controller_populations::class, 'export'])->name('export-populations');
+
+// Export
+Route::get('Export', [Controller_Export::class, 'show'])->name('Export-table');
