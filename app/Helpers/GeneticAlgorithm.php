@@ -2,6 +2,9 @@
 
 namespace App\Helpers;
 
+use App\Models\M_mata_kuliah;
+use App\Models\M_population_dosen;
+
 class GeneticAlgorithm
 {
     private $populationSize;
@@ -53,6 +56,9 @@ class GeneticAlgorithm
             $schedule = [];
 
             foreach ($this->populations as $course) {
+
+                $sks = M_mata_kuliah::find($course['matkul_id'])->sks;                
+
                 $day = $this->daysInWeek[array_rand($this->daysInWeek)];
                 $timeSlot = $this->timeSlots[array_rand($this->timeSlots)];
 
@@ -70,7 +76,7 @@ class GeneticAlgorithm
 
                 $course['hari'] = $day;
                 $course['waktu_mulai'] = $timeSlot;
-                $course['waktu_selesai'] = date('H:i:s', strtotime($timeSlot) + 50 * 60); // 50 minutes later
+                $course['waktu_selesai'] = date('H:i:s', strtotime($timeSlot) + (50 * 60 * $sks) ); // 50 minutes later
                 $course['ruangan_id'] = $room['id'];
 
                 $schedule[] = $course;
@@ -155,6 +161,7 @@ class GeneticAlgorithm
         $bestSchedule = null;
 
         foreach ($population as $schedule) {
+            // dd($schedule);
             $fitness = $this->calculateFitness($schedule);
 
             if ($fitness < $bestFitness) {
@@ -186,14 +193,30 @@ class GeneticAlgorithm
     }
 
     private function calculateOverlap($schedule)
-    {
+    {              
         $overlapCount = 0;
 
         foreach ($schedule as $i => $course1) {
             foreach ($schedule as $j => $course2) {
-                if ($i != $j) {
+                if ($i != $j) {                    
+                    
+                    $dosen_check = false;
+
+                    foreach($course1['dosen'] as $dos1){
+                        
+                        foreach($course2['dosen'] as $dos2){
+                            if($dos1['dosen_id'] == $dos2['dosen_id'] ){
+                                $dosen_check == true;
+                            }
+                        }
+                        
+                    }
+                    // dd($dosen_check , $arr_id_dosen1, $arr_id_dosen2);                    
+
+
                     if (
-                        $course1['dosen_id'] == $course2['dosen_id'] &&
+
+                        $dosen_check &&
                         $course1['hari'] == $course2['hari'] &&
                         $course1['waktu_mulai'] == $course2['waktu_mulai']
                     ) {

@@ -16,7 +16,13 @@
                                    @foreach ($populations as $population)
                                        <tr class="text-gray-700 dark:text-gray-400">
                                            <td class="px-4 py-3 text-sm">
-                                               {{ $population->dosen->nama }}
+                                               {{ 
+                                               implode(", ", $population->dosen->map(
+                                                function ($dos){
+                                                    return $dos->dosen->nama;
+                                                }
+                                            )->toArray());
+                                                }}
                                            </td>
                                            <td class="px-4 py-3">
                                                <div>

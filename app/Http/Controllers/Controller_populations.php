@@ -22,6 +22,7 @@ class Controller_populations extends Controller
                 'kurikulum_id' => 'required'
             ]);
             $id = $request->kurikulum_id;
+
             $kurikulums = M_kurikulum::all();
             $populations = M_Populations::where('kurikulum_id', $id)->paginate(8);
             $jurusans = M_jurusan::all();
@@ -36,6 +37,19 @@ class Controller_populations extends Controller
 
         $title = 'Populations';
         $populations = M_Populations::with(['jurusan', 'mataKuliah', 'dosen', 'ruangan'])->paginate(10);
+        // $populations = M_Populations::with(['jurusan', 'mataKuliah',  'ruangan'])->first();
+        // dd($populations);
+
+        // $test = $populations[0]->dosen->map(
+        //     function ($dos){
+        //         return $dos->dosen->nama;
+        //     }
+        // )->toArray();
+
+        // $test = implode(", ", $test);
+        // dd($test);
+
+
         $jurusans = M_jurusan::all();
         $dosens = M_dosen::all();
         $matkuls = M_mata_kuliah::all();
@@ -55,7 +69,7 @@ class Controller_populations extends Controller
         ]);
         $id = $request->kurikulum_id;
         M_Populations::create($validatedData);
-        return redirect()->route('population')->with([
+        return back()->with([
             'success' => 'Data Gen berhasil ditambahkan',
             'kurikulum_id' => $id
         ]);
