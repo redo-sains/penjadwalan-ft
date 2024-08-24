@@ -27,6 +27,8 @@ class Controller_Perhitungan extends Controller
         $ga = new GeneticAlgorithm(100, 0.02, 10, 50, $populations, $rooms);
         $result = $ga->run();
 
+        // dd($result);
+
         
         $bestSchedule = $result['bestSchedule'];
 

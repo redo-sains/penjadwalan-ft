@@ -167,7 +167,7 @@
                                    <span class="text-gray-700 dark:text-gray-400">Dosen</span>
                                    <div
                                        class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
-                                       <select name="dosen_id" multiple 
+                                       <select name="dosen_id[]"  multiple="true" 
                                            class="js-choice block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray "
                                            placeholder="tambah dosen"
                                            >

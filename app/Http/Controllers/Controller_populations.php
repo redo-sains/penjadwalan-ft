@@ -7,6 +7,7 @@ use App\Models\M_dosen;
 use App\Models\M_jurusan;
 use App\Models\M_kurikulum;
 use App\Models\M_mata_kuliah;
+use App\Models\M_population_dosen;
 use App\Models\M_Populations;
 use App\Models\M_ruangan;
 use Illuminate\Http\Request;
@@ -61,14 +62,30 @@ class Controller_populations extends Controller
     public function create(Request $request)
     {
 
+        // dd($request->dosen_id);
+
         $validatedData = $request->validate([
             'jurusan_id' => 'required|string',
             'matkul_id' => 'required|string',
-            'dosen_id' => 'required|string',
+            'dosen_id' => 'required',
             'kurikulum_id' => 'required'
         ]);
+
+        
+        
         $id = $request->kurikulum_id;
-        M_Populations::create($validatedData);
+        $population_id= M_Populations::create($validatedData)->id;
+
+        $data_dosen = [];
+        foreach($request->dosen_id as $dosen){
+            $data_dosen[] = [
+                "population_id" => $population_id,
+                "dosen_id" => $dosen,
+            ];
+        }
+        
+        // dd($data_dosen);
+        M_population_dosen::insert($data_dosen);
         return back()->with([
             'success' => 'Data Gen berhasil ditambahkan',
             'kurikulum_id' => $id
@@ -90,9 +107,22 @@ class Controller_populations extends Controller
         $validatedData = $request->validate([
             'jurusan_id' => 'required|string',
             'matkul_id' => 'required|string',
-            'dosen_id' => 'required|string',
+            'dosen_id' => 'required',
             // 'ruangan_id' => 'required|string',
         ]);
+
+        M_population_dosen::where('population_id',$id)->delete();;
+
+        $data_dosen = [];
+        foreach($request->dosen_id as $dosen){
+            $data_dosen[] = [
+                "population_id" => $id,
+                "dosen_id" => $dosen,
+            ];
+        }
+        
+        // dd($data_dosen);
+        M_population_dosen::insert($data_dosen);
         $gen = M_Populations::findOrFail($id);
         $gen->update($validatedData);
         return redirect()->route('population')->with('success', 'Data Gen berhasil diperbarui.');
