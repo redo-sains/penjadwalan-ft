@@ -23,10 +23,10 @@
                    <div class="flex items-center justify-between">
                        <div class="w-full">
                            <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                               Generate Jadwal
+                               Pengampu
                            </h2>
                            <div class="flex justify-between w-full  items-center ">
-                               <form action="{{ route('population') }}" method="get" id="kurikulumForm">
+                               <form action="{{ route('pengampu') }}" method="get" id="kurikulumForm">
                                    {{-- @csrf --}}
                                    <div class="px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
                                        <label class="block text-sm">
@@ -61,25 +61,13 @@
                                    </div>
                                </form>
                                <div class="flex ">
-                                   @if (isset($kurikulum_id))
-                                       <form class="mr-2" method="POST" action="{{ route('generate-jadwal') }}">
-                                           @csrf
-                                           @method('POST')
-                                           <input type="hidden" name="kurikulum_id" value="{{ $kurikulum_id }}">
-                                           <button
-                                               class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-                                               Generate Jadwal
-                                           </button>
-                                       </form>
+                                   @if (isset($kurikulum_id))                                       
+                                       <button @click="openModal"
+                                           class="px-4 mr-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                                           Tambah Pengampu
+                                       </button>
+
                                        
-                                       <form method="POST" action="{{ route('export-populations') }}">
-                                           @csrf
-                                           @method('POST')
-                                           <button
-                                               class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-                                               Download Excel
-                                           </button>
-                                       </form>
                                        {{-- <form method="POST" action="{{ route('generate-population') }}">
                                             @csrf
                                             @method('POST')
@@ -101,7 +89,7 @@
                    <div class="w-full overflow-hidden rounded-lg shadow-xs">
                        <div class="w-full overflow-x-auto">
                            {{-- table here --}}
-                           @include('admin.generate.exportExcel')
+                           @include('admin.generate.pengampuExportExcel')
                        </div>
                        <!-- Pagination -->
                        <div
@@ -113,7 +101,7 @@
                            <div
                                class="flex px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
                                <span class="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
-                                   {{  $populations->appends(request()->query())->links() }}
+                                   {{ $populations->appends(request()->query())->links() }}
                                </span>
                            </div>
 

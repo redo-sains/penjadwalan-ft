@@ -10,10 +10,20 @@
                     </h2>
 
 
-                    <button @click="openModal"
-                        class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-                        Tambah jurusan
-                    </button>
+                    <div>
+                        <button id="test"
+                            class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                            Tambah Jurusan
+                        </button>
+
+                        <button id="test2"
+                            class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                            Import Jurusan
+                        </button>
+                        <button id="triggerOpenModal" @click="openModal" class="hidden">
+                            open Modal
+                        </button>
+                    </div>
                 </div>
                 <!-- With actions -->
 
@@ -131,7 +141,7 @@
                     </button>
                 </header>
                 <!-- Modal tambah  -->
-                <div class="mt-4 mb-6">
+                <div id="modal_tambah_dosen" class="mt-4 mb-6">
                     <!-- Modal title -->
                     <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300  ">
                         Tambah Jurusan
@@ -191,4 +201,103 @@
         </div>
         <!-- End of modal update hari  -->
     </div>
+
+    <div id="modal_import" class="mt-4 mb-6 hidden">
+        <!-- Modal title -->
+        <p class="mb-2 px-3 text-lg font-semibold text-gray-700 dark:text-gray-300  ">
+            Import Data
+        </p>
+        <!-- Modal description -->
+        <form class="grid grid-cols-2" action="{{ route('import-jurusans') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                <label class="block text-sm">
+                    <span class="text-gray-700 dark:text-gray-400">Input Excel</span>
+                    <!-- focus-within sets the color for the icon when input is focused -->
+                    <div
+                        class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
+                        <input type="file" name="file" accept=".xlsx, .xls, .csv"
+                            class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
+                            />
+                        
+                    </div>
+                </label>
+            </div>
+            
+            <button type="submit"
+                class="flex items-center justify-center mt-2  py-3 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple">Import</button>
+        </form>
+    </div>
+
+    <script>
+        function SwapNode(N1, N2) {
+            var P1 = N1.parentNode;
+            var T1 = document.createElement("span");
+            P1.insertBefore(T1, N1);
+
+            var P2 = N2.parentNode;
+            var T2 = document.createElement("span");
+            P2.insertBefore(T2, N2);
+
+            P1.insertBefore(N2, T1);
+            P2.insertBefore(N1, T2);
+
+            P1.removeChild(T1);
+            P2.removeChild(T2);
+        }
+
+        function clickImport(){
+            modalAddDosen = document.getElementById("modal_tambah_dosen");
+            modalImportData = document.getElementById("modal_import");
+
+            SwapNode(
+                    modalAddDosen,
+                    modalImportData
+                );
+            
+            modalAddDosen.classList.add("hidden");
+            modalImportData.classList.remove("hidden");
+        }
+
+        function clickAddDosen(){
+            modalAddDosen = document.getElementById("modal_tambah_dosen");
+            modalImportData = document.getElementById("modal_import");
+
+            SwapNode(
+                    modalAddDosen,
+                    modalImportData
+                );
+            
+            modalImportData.classList.add("hidden");
+            modalAddDosen.classList.remove("hidden");
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            button1 = document.getElementById("test");
+            button2 = document.getElementById("test2");
+
+            addDosen=true;
+            
+            modal = document.getElementById("triggerOpenModal");
+            button1.addEventListener("click", () => {
+                if(!addDosen){
+                    clickAddDosen();
+                }                                
+                modal.click();
+                addDosen = true;
+            })            
+
+            button2.addEventListener("click", () => {
+                // clickAddDosen(addDosen);
+                if(addDosen){
+                    clickImport()                    
+                }
+                
+                modal.click();
+                addDosen = false;
+                
+            })            
+
+        });
+    </script>
 @endsection

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\JurusanImport;
 use App\Models\M_jurusan;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class Controller_jurusan extends Controller
 {
@@ -73,5 +75,23 @@ class Controller_jurusan extends Controller
 
         // Simpan pesan berhasil ke dalam session
         return redirect()->back()->with('success', 'Data guru ' . $guru->nama . ' berhasil dihapus');
+    }
+
+    public function import(Request $request)
+    {                        
+		// validasi
+		$this->validate($request, [
+			'file' => 'required|mimes:csv,xls,xlsx'
+		]);
+ 
+		// menangkap file excel
+		$file = $request->file('file');		
+ 
+		// import data
+		Excel::import(new JurusanImport, $file);
+ 
+		// alihkan halaman kembali
+		return back()->with('success','Data Jurusan Berhasil Diimport!');
+	
     }
 }

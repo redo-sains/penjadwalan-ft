@@ -27,7 +27,7 @@ class Controller_populations extends Controller
             $kurikulums = M_kurikulum::all();
             $populations = M_Populations::where('kurikulum_id', $id)->paginate(8);
             $jurusans = M_jurusan::all();
-            $dosens = M_dosen::all();
+            $dosens = M_dosen::where(["tersedia" => 1])->get();
             $matkuls = M_mata_kuliah::all();
             $ruangans = M_ruangan::all();
             // $kurikulums = M_kurikulum::all();
@@ -58,6 +58,50 @@ class Controller_populations extends Controller
         $kurikulums = M_kurikulum::all();
 
         return view('admin.populations.index', compact('populations', 'title', 'jurusans', 'dosens', 'matkuls', 'ruangans', 'kurikulums'));
+    }
+
+    public function pengampu(Request $request)
+    {
+        if (isset($request->kurikulum_id)) {
+            $validatedData = $request->validate([
+                'kurikulum_id' => 'required'
+            ]);
+            $id = $request->kurikulum_id;
+
+            $kurikulums = M_kurikulum::all();
+            $populations = M_Populations::where('kurikulum_id', $id)->paginate(8);
+            $jurusans = M_jurusan::all();
+            $dosens = M_dosen::where(["tersedia" => 1])->get();
+            $matkuls = M_mata_kuliah::all();
+            $ruangans = M_ruangan::all();
+            // $kurikulums = M_kurikulum::all();
+            $title = "Halaman Pengampu";
+
+            return view('admin.populations.pengampu', compact('populations', 'title', 'jurusans', 'dosens', 'matkuls', 'ruangans', 'kurikulums', 'id'));
+        }
+
+        $title = 'Halaman Pengampu';
+        $populations = M_Populations::with(['jurusan', 'mataKuliah', 'dosen', 'ruangan'])->paginate(10);
+        // $populations = M_Populations::with(['jurusan', 'mataKuliah',  'ruangan'])->first();
+        // dd($populations);
+
+        // $test = $populations[0]->dosen->map(
+        //     function ($dos){
+        //         return $dos->dosen->nama;
+        //     }
+        // )->toArray();
+
+        // $test = implode(", ", $test);
+        // dd($test);
+
+
+        $jurusans = M_jurusan::all();
+        $dosens = M_dosen::all();
+        $matkuls = M_mata_kuliah::all();
+        $ruangans = M_ruangan::all();
+        $kurikulums = M_kurikulum::all();
+
+        return view('admin.populations.pengampu', compact('populations', 'title', 'jurusans', 'dosens', 'matkuls', 'ruangans', 'kurikulums'));
     }
     public function create(Request $request)
     {

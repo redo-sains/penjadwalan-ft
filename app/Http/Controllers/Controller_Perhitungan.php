@@ -18,6 +18,11 @@ class Controller_Perhitungan extends Controller
 
         if (isset($kurikulum_id)) {
             $populations = M_Populations::where('kurikulum_id', $kurikulum_id)->with('dosen')->get()->toArray();
+
+            foreach ($populations as $index => $pengampu) {
+                # code...
+            }
+            // dd($populations);
             $jadwal = M_Populations::where('kurikulum_id', $kurikulum_id)->get();
         } else {
             $populations = M_Populations::with('dosen')->all()->toArray();

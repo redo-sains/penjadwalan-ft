@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\MataKuliahImport;
 use App\Models\M_jurusan;
 use App\Models\M_mata_kuliah;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class Controller_mata_kuliah extends Controller
 {
@@ -78,5 +80,22 @@ class Controller_mata_kuliah extends Controller
         $matkul->delete();
         // Simpan pesan berhasil ke dalam session
         return redirect()->back()->with('success', 'Data mata kuliah ' . $matkul->nama . ' berhasil dihapus');
+    }
+    public function import(Request $request)
+    {                        
+		// validasi
+		$this->validate($request, [
+			'file' => 'required|mimes:csv,xls,xlsx'
+		]);
+ 
+		// menangkap file excel
+		$file = $request->file('file');		
+ 
+		// import data
+		Excel::import(new MataKuliahImport, $file);
+ 
+		// alihkan halaman kembali
+		return back()->with('success','Data Jurusan Berhasil Diimport!');
+	
     }
 }

@@ -97,6 +97,7 @@
                               Kuliah</span>
                       </a>
                   </li>
+                  
                   {{-- <li class="relative px-6 py-3">
                       @if ($title === 'Master Kelas')
                           <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
@@ -155,7 +156,7 @@
                               </li>
                                <li
                                   class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                                  <a class="w-full" href="{{ route('population') }}">
+                                  <a class="w-full" href="{{ route('pengampu') }}">
                                       Pengampu
                                   </a>
                               </li>
@@ -173,7 +174,7 @@
                              
                               <li
                                   class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                                  <a class="w-full" href="pages/create-account.html">
+                                  <a class="w-full" href="{{ route('population') }}">
                                       Generate jadwal
                                   </a>
                               </li>

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\RuanganImport;
 use App\Models\M_jurusan;
 use App\Models\M_ruangan;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class Controller_ruangan extends Controller
 {
@@ -97,5 +99,23 @@ class Controller_ruangan extends Controller
         $ruangan->delete();
         // Simpan pesan berhasil ke dalam session
         return redirect()->back()->with('success', 'Data Ruangan ' . $ruangan->nama . ' berhasil dihapus');
+    }
+
+    public function import(Request $request)
+    {                        
+		// validasi
+		$this->validate($request, [
+			'file' => 'required|mimes:csv,xls,xlsx'
+		]);
+ 
+		// menangkap file excel
+		$file = $request->file('file');		
+ 
+		// import data
+		Excel::import(new RuanganImport, $file);
+ 
+		// alihkan halaman kembali
+		return back()->with('success','Data Jurusan Berhasil Diimport!');
+	
     }
 }
