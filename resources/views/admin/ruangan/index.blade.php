@@ -34,6 +34,7 @@
                             <thead>
                                 <tr
                                     class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+                                    <th class="px-4 py-3">Id</th>
                                     <th class="px-4 py-3">Ruangan</th>
                                     <th class="px-4 py-3">Kapasitas</th>
                                     <th class="px-4 py-3">Kode Ruangan</th>
@@ -44,6 +45,9 @@
                             <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
                                 @foreach ($Ruangans as $Ruangan)
                                     <tr class="text-gray-700 dark:text-gray-400">
+                                        <td class="px-4 py-3 text-sm">
+                                            {{ $Ruangan->id }}
+                                        </td>
                                         <td class="px-4 py-3">
                                             <div class="flex items-center text-sm">
                                                 <!-- Avatar with inset shadow -->

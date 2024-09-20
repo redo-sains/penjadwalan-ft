@@ -35,8 +35,8 @@
                                                class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
                                                <select name="kurikulum_id" id="kurikulumSelect"
                                                    class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-select">
+                                                   {{-- <option value="#" selected disabled>Pilih kurikulum</option> --}}
                                                    <option value="#" selected disabled>Pilih kurikulum</option>
-
                                                    @foreach ($kurikulums as $kurikulum)
                                                        <option
                                                            @isset($id)
@@ -59,13 +59,54 @@
                                            </div>
                                        </label>
                                    </div>
+                                   <div class="px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                                       <label class="block text-sm">
+                                           <span class="text-gray-700 dark:text-gray-400">Jurusan</span>
+                                           <div
+                                               class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
+                                               <select name="jurusan_filter" id="jurusanFilter"
+                                           class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-select">
+                                           <option selected value="" >Pilih jurusan/semua</option>
+                                           @foreach ($jurusans as $jurusan)
+                                               <option value="{{ $jurusan->id }}" class=""
+                                                @isset($jurusan_id)
+                                                {{ $jurusan->id == $jurusan_id || $selectedKurikulumId ? 'selected' : '' }}
+                                            @endisset
+                                                >
+                                                   {{ $jurusan->nama }}</option>
+                                           @endforeach
+                                       </select>
+                                               <div class="absolute inset-y-0 flex items-center ml-3 pointer-events-none">
+                                                   <svg class="w-5 h-5" aria-hidden="true" fill="none"
+                                                       stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                       viewBox="0 0 24 24" stroke="currentColor">
+                                                       <path
+                                                           d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                                                       </path>
+                                                   </svg>
+                                               </div>
+                                           </div>
+                                       </label>
+                                   </div>
                                </form>
+                               
+                               
                                <div class="flex ">
-                                   @if (isset($kurikulum_id))                                       
-                                       <button @click="openModal"
-                                           class="px-4 mr-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-                                           Tambah Pengampu
-                                       </button>
+                                   @if (isset($kurikulum_id))   
+                                   <button id="test"
+                                   style="margin-right: 8px"
+                            class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                            Tambah Pengampu
+                        </button>
+
+                        <button id="test2"
+                            class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                            Import Pengampu
+                        </button>
+                        <button id="triggerOpenModal" @click="openModal" class="hidden">
+                            open Modal
+                        </button>                                    
+                                       
 
                                        
                                        {{-- <form method="POST" action="{{ route('generate-population') }}">
@@ -136,7 +177,7 @@
                        </button>
                    </header>
                    <!-- Modal tambah population -->
-                   <div class="mt-4 mb-6">
+                   <div class="mt-4 mb-6" id="modal_tambah_dosen">
                        <!-- Modal title -->
                        <p class="mb-2 px-3 text-lg font-semibold text-gray-700 dark:text-gray-300  ">
                            Tambah GEN Baru
@@ -173,37 +214,14 @@
                                    </div>
                                </label>
                            </div>
-                           <div class="px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
-                               <label class="block text-sm">
-                                   <span class="text-gray-700 dark:text-gray-400">Mata kuliah</span>
-                                   <div
-                                       class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
-                                       <select name="matkul_id"
-                                           class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-select">
-                                           <option value="#" selected disabled>Pilih Matkul</option>
-                                           @foreach ($matkuls as $matkul)
-                                               <option value="{{ $matkul->id }}" class="">
-                                                   {{ $matkul->nama }}</option>
-                                           @endforeach
-                                       </select>
-                                       <div class="absolute inset-y-0 flex items-center ml-3 pointer-events-none">
-                                           <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round"
-                                               stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"
-                                               stroke="currentColor">
-                                               <path
-                                                   d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
-                                               </path>
-                                           </svg>
-                                       </div>
-                                   </div>
-                               </label>
-                           </div>
+                           
                            <div class="px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
                                <label class="block text-sm">
                                    <span class="text-gray-700 dark:text-gray-400">Jurusan</span>
                                    <div
                                        class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
                                        <select name="jurusan_id"
+                                            onchange="changeJurusan(this.value)"
                                            class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-select">
                                            <option value="#" selected disabled>Pilih jurusan</option>
                                            @foreach ($jurusans as $jurusan)
@@ -224,6 +242,32 @@
                                    </div>
                                </label>
                            </div>
+                           <div class="px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                            <label class="block text-sm">
+                                <span class="text-gray-700 dark:text-gray-400">Mata kuliah</span>
+                                <div
+                                    class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
+                                    <select name="matkul_id"      
+                                        id="matkul_id"                                  
+                                        class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-select">
+                                        <option value="#" selected disabled>Pilih Matkul</option>
+                                        @foreach ($matkuls as $matkul)
+                                            <option value="{{ $matkul->id }}" class="">
+                                                {{ $matkul->nama }}</option>
+                                        @endforeach
+                                    </select>
+                                    <div class="absolute inset-y-0 flex items-center ml-3 pointer-events-none">
+                                        <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round"
+                                            stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path
+                                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
 
                            <button type="submit"
                                class="flex items-center justify-center mt-2  py-3 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple">Simpan</button>
@@ -232,11 +276,116 @@
 
                </div>
            </div>
+
            <!-- End of modal update hari  -->
        </div>
+
+       <div id="modal_import" class="mt-4 mb-6 hidden">
+        <!-- Modal title -->
+        <p class="mb-2 px-3 text-lg font-semibold text-gray-700 dark:text-gray-300  ">
+            Import Data
+        </p>
+        <!-- Modal description -->
+        <form class="grid grid-cols-2" action="{{ route('import-pengampu') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                <label class="block text-sm">
+                    <span class="text-gray-700 dark:text-gray-400">Input Excel</span>
+                    <!-- focus-within sets the color for the icon when input is focused -->
+                    <div
+                        class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
+                        <input type="file" name="file" accept=".xlsx, .xls, .csv"
+                            class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
+                            />
+                        
+                    </div>
+                </label>
+            </div>
+            
+            <button type="submit"
+                class="flex items-center justify-center mt-2  py-3 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple">Import</button>
+        </form>
+    </div>
+
+    <script>
+        function SwapNode(N1, N2) {
+            var P1 = N1.parentNode;
+            var T1 = document.createElement("span");
+            P1.insertBefore(T1, N1);
+
+            var P2 = N2.parentNode;
+            var T2 = document.createElement("span");
+            P2.insertBefore(T2, N2);
+
+            P1.insertBefore(N2, T1);
+            P2.insertBefore(N1, T2);
+
+            P1.removeChild(T1);
+            P2.removeChild(T2);
+        }
+
+        function clickImport(){
+            modalAddDosen = document.getElementById("modal_tambah_dosen");
+            modalImportData = document.getElementById("modal_import");
+
+            SwapNode(
+                    modalAddDosen,
+                    modalImportData
+                );
+            
+            modalAddDosen.classList.add("hidden");
+            modalImportData.classList.remove("hidden");
+        }
+
+        function clickAddDosen(){
+            modalAddDosen = document.getElementById("modal_tambah_dosen");
+            modalImportData = document.getElementById("modal_import");
+
+            SwapNode(
+                    modalAddDosen,
+                    modalImportData
+                );
+            
+            modalImportData.classList.add("hidden");
+            modalAddDosen.classList.remove("hidden");
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            button1 = document.getElementById("test");
+            button2 = document.getElementById("test2");
+
+            addDosen=true;
+            
+            modal = document.getElementById("triggerOpenModal");
+            button1.addEventListener("click", () => {
+                if(!addDosen){
+                    clickAddDosen();
+                }                                
+                modal.click();
+                addDosen = true;
+            })            
+
+            button2.addEventListener("click", () => {
+                // clickAddDosen(addDosen);
+                if(addDosen){
+                    clickImport()                    
+                }
+                
+                modal.click();
+                addDosen = false;
+                
+            })            
+
+        });
+    </script>
+
        <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
        <script>
            document.getElementById('kurikulumSelect').addEventListener('change', function() {
+               // Jika elemen select berubah, kirimkan form
+               document.getElementById('kurikulumForm').submit();
+           });
+           document.getElementById('jurusanFilter').addEventListener('change', function() {
                // Jika elemen select berubah, kirimkan form
                document.getElementById('kurikulumForm').submit();
            });
@@ -255,5 +404,23 @@
                    // addItems: false,
                });
            });
+
+           function changeJurusan(val){
+            let matkul = @json($matkuls);
+
+            const matkulEl = document.getElementById('matkul_id');
+
+            let textHtml = `<option value="" selected disabled>Pilih Matkul</option>`;
+
+            // console.log(matkul);
+            
+
+            matkul.filter(v => v.jurusan_id == val).forEach(v => {
+                textHtml += `<option value="${v.id}" class="">${v.nama}</option>`;
+            });
+
+            matkulEl.innerHTML = textHtml;
+            
+           }
        </script>
    @endsection

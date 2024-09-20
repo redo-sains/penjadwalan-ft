@@ -83,6 +83,7 @@ Route::put('/kelas/{id}', [Controller_kelas::class, 'update'])->name('update_kel
 
 // routes pengampu
 Route::get('/pengampu', [Controller_populations::class, 'pengampu'])->name('pengampu');
+Route::post('/pengampu/import', [Controller_populations::class, 'import'])->name('import-pengampu');
 // Route::post('/population/tambah', [Controller_populations::class, 'create'])->name('store_population');
 // Route::delete('/population-delete/{id}', [Controller_populations::class, 'delete'])->name('hapus_population');
 // Route::get('/population/{id}/edit', [Controller_populations::class, 'edit'])->name('edit_population');

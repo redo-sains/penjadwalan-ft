@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\Export_Jadwal;
+use App\Imports\JadwalImport;
 use App\Models\M_dosen;
 use App\Models\M_jurusan;
 use App\Models\M_kurikulum;
@@ -18,14 +19,33 @@ class Controller_populations extends Controller
     //
     public function show(Request $request)
     {
+        $last_id = M_kurikulum::all()->last()->id;   
         if (isset($request->kurikulum_id)) {
             $validatedData = $request->validate([
                 'kurikulum_id' => 'required'
             ]);
             $id = $request->kurikulum_id;
 
-            $kurikulums = M_kurikulum::all();
-            $populations = M_Populations::where('kurikulum_id', $id)->paginate(8);
+            $last = M_kurikulum::all()->last()->id;
+
+            $kurikulums = M_kurikulum::all()->reverse()->values();
+
+            $populations = M_Populations::where('kurikulum_id', $id);
+
+            // dd()
+            $jurusan_id = $request->jurusan_filter;
+            if(isset($request->jurusan_filter) && $request->jurusan_filter != "" ){
+                $populations = $populations->where('jurusan_id', $request->jurusan_filter);
+            }
+
+            $hari_id = $request->hari_filter;
+
+            if(isset($request->hari_filter) && $request->hari_filter != "" ){
+                $populations = $populations->where('hari', $request->hari_filter);
+            }
+
+            $populations = $populations->paginate(10);
+
             $jurusans = M_jurusan::all();
             $dosens = M_dosen::where(["tersedia" => 1])->get();
             $matkuls = M_mata_kuliah::all();
@@ -33,43 +53,38 @@ class Controller_populations extends Controller
             // $kurikulums = M_kurikulum::all();
             $title = "Halaman Populasi";
 
-            return view('admin.populations.index', compact('populations', 'title', 'jurusans', 'dosens', 'matkuls', 'ruangans', 'kurikulums', 'id'));
+            return view('admin.populations.index', compact("hari_id" ,"jurusan_id",'last_id','populations', 'title', 'jurusans', 'dosens', 'matkuls', 'ruangans', 'kurikulums', 'id'));
         }
+        
+        $id = M_kurikulum::all()->last()->id;        
 
-        $title = 'Populations';
-        $populations = M_Populations::with(['jurusan', 'mataKuliah', 'dosen', 'ruangan'])->paginate(10);
-        // $populations = M_Populations::with(['jurusan', 'mataKuliah',  'ruangan'])->first();
-        // dd($populations);
+        $route_name = $request->route()->getName();
+        
 
-        // $test = $populations[0]->dosen->map(
-        //     function ($dos){
-        //         return $dos->dosen->nama;
-        //     }
-        // )->toArray();
-
-        // $test = implode(", ", $test);
-        // dd($test);
-
-
-        $jurusans = M_jurusan::all();
-        $dosens = M_dosen::all();
-        $matkuls = M_mata_kuliah::all();
-        $ruangans = M_ruangan::all();
-        $kurikulums = M_kurikulum::all();
-
-        return view('admin.populations.index', compact('populations', 'title', 'jurusans', 'dosens', 'matkuls', 'ruangans', 'kurikulums'));
+        return redirect()->route($route_name, ["kurikulum_id" => $last_id]);     
+        
     }
 
     public function pengampu(Request $request)
     {
+        $last_id = M_kurikulum::all()->last()->id;      
         if (isset($request->kurikulum_id)) {
             $validatedData = $request->validate([
                 'kurikulum_id' => 'required'
             ]);
             $id = $request->kurikulum_id;
+            $last = M_kurikulum::all()->last()->id;
 
-            $kurikulums = M_kurikulum::all();
-            $populations = M_Populations::where('kurikulum_id', $id)->paginate(8);
+            $kurikulums = M_kurikulum::all()->reverse()->values();
+
+            $jurusan_id = $request->jurusan_filter;
+            if(isset($request->jurusan_filter) && $request->jurusan_filter != ""){
+                // dd($request->jurusan_filter);
+                $populations = M_Populations::where(['kurikulum_id' => $id, 'jurusan_id' => $jurusan_id ])->paginate(10) ;                
+            }else{
+                $populations = M_Populations::where('kurikulum_id', $id)->paginate(10);
+            }
+
             $jurusans = M_jurusan::all();
             $dosens = M_dosen::where(["tersedia" => 1])->get();
             $matkuls = M_mata_kuliah::all();
@@ -77,36 +92,21 @@ class Controller_populations extends Controller
             // $kurikulums = M_kurikulum::all();
             $title = "Halaman Pengampu";
 
-            return view('admin.populations.pengampu', compact('populations', 'title', 'jurusans', 'dosens', 'matkuls', 'ruangans', 'kurikulums', 'id'));
+            
+
+            return view('admin.populations.pengampu', compact('jurusan_id','last_id','populations', 'title', 'jurusans', 'dosens', 'matkuls', 'ruangans', 'kurikulums', 'id'));
         }
 
         $title = 'Halaman Pengampu';
-        $populations = M_Populations::with(['jurusan', 'mataKuliah', 'dosen', 'ruangan'])->paginate(10);
-        // $populations = M_Populations::with(['jurusan', 'mataKuliah',  'ruangan'])->first();
-        // dd($populations);
+          
 
-        // $test = $populations[0]->dosen->map(
-        //     function ($dos){
-        //         return $dos->dosen->nama;
-        //     }
-        // )->toArray();
+        $route_name = $request->route()->getName();
+        // dd($route_name);
 
-        // $test = implode(", ", $test);
-        // dd($test);
-
-
-        $jurusans = M_jurusan::all();
-        $dosens = M_dosen::all();
-        $matkuls = M_mata_kuliah::all();
-        $ruangans = M_ruangan::all();
-        $kurikulums = M_kurikulum::all();
-
-        return view('admin.populations.pengampu', compact('populations', 'title', 'jurusans', 'dosens', 'matkuls', 'ruangans', 'kurikulums'));
+        return redirect()->route($route_name, ["kurikulum_id" => $last_id]);                
     }
     public function create(Request $request)
-    {
-
-        // dd($request->dosen_id);
+    {        
 
         $validatedData = $request->validate([
             'jurusan_id' => 'required|string',
@@ -146,6 +146,7 @@ class Controller_populations extends Controller
         $ruangans = M_ruangan::all();
         return view('admin.populations.edit', compact('title', 'population', 'jurusans', 'matkuls', 'ruangans', 'dosens'));
     }
+
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
@@ -318,5 +319,25 @@ class Controller_populations extends Controller
     public function export()
     {
         return Excel::download(new Export_Jadwal, 'population.xlsx');
+    }
+
+    public function import(Request $request)
+    {
+        
+                
+		// validasi
+		$this->validate($request, [
+			'file' => 'required|mimes:csv,xls,xlsx'
+		]);
+ 
+		// menangkap file excel
+		$file = $request->file('file');		
+ 
+		// import data
+		Excel::import(new JadwalImport, $file);
+ 
+		// alihkan halaman kembali
+		return back()->with('success','Data Dosen Berhasil Diimport!');
+	
     }
 }

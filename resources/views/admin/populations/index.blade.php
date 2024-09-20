@@ -1,18 +1,13 @@
    @php
        $kurikulum_id = request('kurikulum_id');
        $selectedKurikulumId = session('kurikulum_id');
+       $daysInWeek = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'];
+    //    dd($last_id);
    @endphp
 
    {{-- @if (Auth::user()->role === 'admin')  --}}
 
-   @extends('admin.layout.layout')
-
-   {{-- @endif --}}
-   {{-- @if (Auth::user()->role === 'pengunjung') 
-
-@extends('mahasiswa.layout.layout')
-    
-@endif --}}
+   @extends('admin.layout.layout')   
 
    @section('main')
        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
@@ -25,40 +20,103 @@
                            <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
                                Generate Jadwal
                            </h2>
-                           <div class="flex justify-between w-full  items-center ">
+                           <div class="flex justify-between w-full  items-center " >
                                <form action="{{ route('population') }}" method="get" id="kurikulumForm">
-                                   {{-- @csrf --}}
-                                   <div class="px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
-                                       <label class="block text-sm">
-                                           <span class="text-gray-700 dark:text-gray-400">Kurikulum</span>
-                                           <div
-                                               class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
-                                               <select name="kurikulum_id" id="kurikulumSelect"
-                                                   class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-select">
-                                                   <option value="#" selected disabled>Pilih kurikulum</option>
-
-                                                   @foreach ($kurikulums as $kurikulum)
-                                                       <option
-                                                           @isset($id)
-                                                    {{ $kurikulum->id == $id || $selectedKurikulumId ? 'selected' : '' }}
-                                                @endisset
-                                                           value="{{ $kurikulum->id }}">
-                                                           {{ $kurikulum->tahun_mulai . ' - ' . $kurikulum->tahun_selesai . ' / ' . $kurikulum->semester }}
-                                                       </option>
-                                                   @endforeach
-                                               </select>
-                                               <div class="absolute inset-y-0 flex items-center ml-3 pointer-events-none">
-                                                   <svg class="w-5 h-5" aria-hidden="true" fill="none"
-                                                       stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                       viewBox="0 0 24 24" stroke="currentColor">
-                                                       <path
-                                                           d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
-                                                       </path>
-                                                   </svg>
+                                   <div class="flex" style="gap: 12px;">
+   
+                                       <div class="px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                                           <label class="block text-sm">
+                                               <span class="text-gray-700 dark:text-gray-400">Kurikulum</span>
+                                               <div
+                                                   class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
+                                                   <select name="kurikulum_id" id="kurikulumSelect"
+                                                       class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-select">
+                                                       <option selected disabled>Pilih kurikulum</option>
+    
+                                                       @foreach ($kurikulums as $kurikulum)
+                                                           <option
+                                                               @isset($id)
+                                                        {{ $kurikulum->id == $id || $selectedKurikulumId ? 'selected' : '' }}
+                                                    @endisset
+                                                               value="{{ $kurikulum->id }}">
+                                                               {{ $kurikulum->tahun_mulai . ' - ' . $kurikulum->tahun_selesai . ' / ' . $kurikulum->semester }}
+                                                           </option>
+                                                       @endforeach
+                                                   </select>
+                                                   <div class="absolute inset-y-0 flex items-center ml-3 pointer-events-none">
+                                                       <svg class="w-5 h-5" aria-hidden="true" fill="none"
+                                                           stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                           viewBox="0 0 24 24" stroke="currentColor">
+                                                           <path
+                                                               d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                                                           </path>
+                                                       </svg>
+                                                   </div>
                                                </div>
-                                           </div>
-                                       </label>
+                                           </label>
+                                       </div>
+                                       <div class="px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                                        <label class="block text-sm">
+                                            <span class="text-gray-700 dark:text-gray-400">Jurusan</span>
+                                            <div
+                                                class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
+                                                <select name="jurusan_filter" id="jurusanSelect"
+                                            class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-select">
+                                            <option selected value="" >Pilih jurusan/semua</option>
+                                            @foreach ($jurusans as $jurusan)
+                                                <option value="{{ $jurusan->id }}" class=""
+                                                 @isset($jurusan_id)
+                                                 {{ $jurusan->id == $jurusan_id || $selectedKurikulumId ? 'selected' : '' }}
+                                             @endisset
+                                                 >
+                                                    {{ $jurusan->nama }}</option>
+                                            @endforeach
+                                        </select>
+                                                <div class="absolute inset-y-0 flex items-center ml-3 pointer-events-none">
+                                                    <svg class="w-5 h-5" aria-hidden="true" fill="none"
+                                                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path
+                                                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                                                        </path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </label>
+                                       </div>
+                                       <div class="px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                                           <label class="block text-sm">
+                                               <span class="text-gray-700 dark:text-gray-400">Hari</span>
+                                               <div
+                                                   class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
+                                                   <select name="hari_filter" id="hariSelect"
+                                                       class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-select">
+                                                       <option value="" selected>Pilih hari/Semua</option>
+    
+                                                       @foreach ($daysInWeek as $day)
+                                                           <option
+                                                               @isset($id)
+                                                        {{ $day == $hari_id ? 'selected' : '' }}
+                                                    @endisset
+                                                               value="{{ $day }}">
+                                                               {{ $day}}
+                                                           </option>
+                                                       @endforeach
+                                                   </select>
+                                                   <div class="absolute inset-y-0 flex items-center ml-3 pointer-events-none">
+                                                       <svg class="w-5 h-5" aria-hidden="true" fill="none"
+                                                           stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                           viewBox="0 0 24 24" stroke="currentColor">
+                                                           <path
+                                                               d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                                                           </path>
+                                                       </svg>
+                                                   </div>
+                                               </div>
+                                           </label>
+                                       </div>
                                    </div>
+                                   {{-- @csrf --}}
                                </form>
                                <div class="flex ">
                                    @if (isset($kurikulum_id))
@@ -66,10 +124,16 @@
                                            @csrf
                                            @method('POST')
                                            <input type="hidden" name="kurikulum_id" value="{{ $kurikulum_id }}">
-                                           <button
-                                               class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-                                               Generate Jadwal
-                                           </button>
+                                           @isset($last_id)  
+                                           @if ($last_id == $kurikulum_id)
+                                                <button
+                                                class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                                                Generate Jadwal
+                                            </button>    
+                                           @endif                                          
+                                           
+                                           @endisset
+                                           
                                        </form>
                                        
                                        <form method="POST" action="{{ route('export-populations') }}">
@@ -249,6 +313,14 @@
        <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
        <script>
            document.getElementById('kurikulumSelect').addEventListener('change', function() {
+               // Jika elemen select berubah, kirimkan form
+               document.getElementById('kurikulumForm').submit();
+           });
+           document.getElementById('jurusanSelect').addEventListener('change', function() {
+               // Jika elemen select berubah, kirimkan form
+               document.getElementById('kurikulumForm').submit();
+           });
+           document.getElementById('hariSelect').addEventListener('change', function() {
                // Jika elemen select berubah, kirimkan form
                document.getElementById('kurikulumForm').submit();
            });
