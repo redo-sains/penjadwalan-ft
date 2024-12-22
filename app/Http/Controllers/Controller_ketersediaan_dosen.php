@@ -40,6 +40,7 @@ class Controller_ketersediaan_dosen extends Controller
         $k_dosen = M_ketersediaan_dosen::findOrFail($id);
         $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
         $dosens = M_dosen::all();
+        // dd($dosens);
         return view('admin.ketersediaan_dosen.edit', compact('title', 'k_dosen', 'days', 'dosens'));
     }
 

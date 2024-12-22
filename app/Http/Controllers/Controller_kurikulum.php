@@ -27,7 +27,7 @@ class Controller_kurikulum extends Controller
             'semester' => 'required',
         ]);
         M_kurikulum::create($dataValidate);
-        return redirect()->route('kurikulum')->with('success', 'Kurikulum tahun' . $request->tahun_mulai . '/' . $request->tahun_mulai . '');
+        return redirect()->route('kurikulum')->with('success', 'Tahun Ajaran' . $request->tahun_mulai . '/' . $request->tahun_mulai . '');
     }
     public function edit($id)
     {

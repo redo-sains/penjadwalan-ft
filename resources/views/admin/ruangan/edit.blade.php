@@ -24,6 +24,18 @@
                     </div>
                     <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
                         <label class="block text-sm">
+                            <span class="text-gray-700 dark:text-gray-400">Lantai</span>
+                            <!-- focus-within sets the color for the icon when input is focused -->
+                            <div
+                                class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
+                                <input value="{{ $ruangan->lantai }}" name="lantai"
+                                    class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
+                                    placeholder="Masukan lantai" required />
+                            </div>
+                        </label>
+                    </div>
+                    <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                        <label class="block text-sm">
                             <span class="text-gray-700 dark:text-gray-400">Kode ruangan</span>
                             <!-- focus-within sets the color for the icon when input is focused -->
                             <div

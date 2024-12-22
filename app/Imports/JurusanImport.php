@@ -4,8 +4,9 @@ namespace App\Imports;
 
 use App\Models\M_jurusan;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class JurusanImport implements ToModel
+class JurusanImport implements ToModel, WithHeadingRow
 {
     /**
     * @param array $row
@@ -14,9 +15,11 @@ class JurusanImport implements ToModel
     */
     public function model(array $row)
     {
-        return new M_jurusan([
-            "nama" => $row[1],
-            "kode" => $row[2],            
-        ]);
+            if($row['nama'] != ""){
+                return new M_jurusan([
+                    "nama" => $row['nama'],
+                    "kode" => $row['kode'],            
+                ]);
+        }
     }
 }

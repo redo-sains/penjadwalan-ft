@@ -19,7 +19,7 @@
                                    {{-- @csrf --}}
                                    <div class="px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
                                        <label class="block text-sm">
-                                           <span class="text-gray-700 dark:text-gray-400">Kurikulum</span>
+                                           <span class="text-gray-700 dark:text-gray-400">Tahun Ajaran</span>
                                            <div
                                                class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
                                                <select name="kurikulum_id" id="kurikulumSelect"
@@ -64,7 +64,7 @@
                                        </form>
                                        <button @click="openModal"
                                            class="px-4 mr-2 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-                                           Tambah Gen
+                                           Tambah Pengampu
                                        </button>
 
                                        <form method="POST" action="{{ route('generate-population') }}">
@@ -94,6 +94,7 @@
                                        <th class="px-4 py-3">Dosen</th>
                                        <th class="px-4 py-3">Jurusan</th>
                                        <th class="px-4 py-3">Mata Kuliah</th>
+                                       <th class="px-4 py-3">Semester</th>
                                        <th class="px-4 py-3">Ruangan</th>
                                        <th class="px-4 py-3">Hari</th>
                                        <th class="px-4 py-3">Waktu mulai</th>
@@ -114,6 +115,9 @@
                                            </td>
                                            <td class="px-4 py-3 text-sm">
                                                {{ $population->mataKuliah->nama }}
+                                           </td>
+                                           <td class="px-4 py-3 text-sm">
+                                               {{ $population->mataKuliah->semester }}
                                            </td>
 
                                            <td>
@@ -241,7 +245,7 @@
                    <div class="mt-4 mb-6">
                        <!-- Modal title -->
                        <p class="mb-2 px-3 text-lg font-semibold text-gray-700 dark:text-gray-300  ">
-                           Tambah GEN Baru
+                           Tambah Pengampu Baru
                        </p>
                        <!-- Modal description -->
                        <form class="grid grid-cols-2" action="{{ route('store_population') }}" method="POST">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\Export_Template_Jurusan;
 use App\Imports\JurusanImport;
 use App\Models\M_jurusan;
 use Illuminate\Http\Request;
@@ -93,5 +94,11 @@ class Controller_jurusan extends Controller
 		// alihkan halaman kembali
 		return back()->with('success','Data Jurusan Berhasil Diimport!');
 	
+    }
+
+    public function exportTemplate()
+    {
+        
+        return Excel::download(new Export_Template_Jurusan, 'template-jurusan.xlsx');
     }
 }

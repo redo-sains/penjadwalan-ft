@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\Export_Template_Dosen;
 use App\Imports\DosenImport;
 use App\Models\M_dosen;
 use App\Models\M_jurusan;
@@ -15,22 +16,31 @@ class Controller_dosen extends Controller
     public function show()
     {
         $title = 'Master dosen';
-        $dosens = M_dosen::paginate(5);
+        $dosens = M_dosen::paginate(50);
+        // dd($dosens);
         $jurusans = M_jurusan::all();
         return view('admin.dosen.index', compact('dosens', 'title', 'jurusans'));
     }
     public function create(Request $request)
     {
         // Validasi data yang diterima dari form
+        
         $validatedData = $request->validate([
             'nama' => 'required|string|max:255',
+            'umur' => 'required|integer|max:100',
+            'jenis_kelamin' => 'required|string',
             'kode' => 'required|string|max:50|unique:dosen',
             'jurusan_id' => 'required|integer|exists:jurusan,id',
             'tersedia' => 'required|boolean',
         ]);
+
+        // dd($request->input());
+
         $dosen = new M_dosen();
         $dosen->nama = $request->nama;
         $dosen->kode = $request->kode;
+        $dosen->gender = $request->jenis_kelamin;
+        $dosen->umur = $request->umur;
         $dosen->tersedia = $request->tersedia;
         $dosen->jurusan_id = $request->jurusan_id;
         $dosen->save();
@@ -51,10 +61,15 @@ class Controller_dosen extends Controller
     {
         $validatedData = $request->validate([
             'nama' => 'required|string|max:255',
+            'umur' => 'required|integer|max:100',
+            'gender' => 'required|string',
             'kode' => 'required|string|max:50',
             'jurusan_id' => 'required|integer|exists:jurusan,id',
             'tersedia' => 'required|boolean',
         ]);
+
+        // dd($request->input());
+
         $dosen = M_dosen::findOrFail($id);        
         // Periksa apakah kode_guru yang baru unik jika diubah
         if ($request->kode !== $dosen->kode) {
@@ -73,6 +88,9 @@ class Controller_dosen extends Controller
 
         }
 
+        $dosen->nama = $request->nama;
+        $dosen->gender = $request->gender;
+        $dosen->umur = $request->umur;
         $dosen->nama = $request->nama;
         $dosen->kode = $request->kode;
         $dosen->tersedia = $request->tersedia;
@@ -109,5 +127,11 @@ class Controller_dosen extends Controller
 		// alihkan halaman kembali
 		return back()->with('success','Data Dosen Berhasil Diimport!');
 	
+    }
+
+    public function exportTemplate()
+    {
+        
+        return Excel::download(new Export_Template_Dosen, 'template-dosen.xlsx');
     }
 }

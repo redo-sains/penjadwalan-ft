@@ -3,14 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Exports\Export_Jadwal;
+use App\Exports\Export_Template_Pengampu;
+// use App\Exports\Export_Template;
 use App\Imports\JadwalImport;
 use App\Models\M_dosen;
 use App\Models\M_jurusan;
+use App\Models\M_kelas;
 use App\Models\M_kurikulum;
 use App\Models\M_mata_kuliah;
+use App\Models\M_pengaturan_algoritma;
 use App\Models\M_population_dosen;
 use App\Models\M_Populations;
 use App\Models\M_ruangan;
+use App\Models\M_slot_waktu;
+use App\Models\M_users;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -44,7 +50,7 @@ class Controller_populations extends Controller
                 $populations = $populations->where('hari', $request->hari_filter);
             }
 
-            $populations = $populations->paginate(10);
+            $populations = $populations->paginate(50);
 
             $jurusans = M_jurusan::all();
             $dosens = M_dosen::where(["tersedia" => 1])->get();
@@ -52,6 +58,33 @@ class Controller_populations extends Controller
             $ruangans = M_ruangan::all();
             // $kurikulums = M_kurikulum::all();
             $title = "Halaman Populasi";
+            $alphabet = range('A', 'Z');  
+            foreach ($populations as $key => $value) {
+                // -> as it return std object
+                $matkul_kelas = M_kelas::where('matkul_id',$value->kelas->matkul_id)->get();
+
+                $index_search = -1;
+
+                if(count($matkul_kelas) > 1){
+                    // $index_search = array_search($value->kelas, $matkul_kelas);
+                    foreach($matkul_kelas as $index_kelas => $matkul_kelas_val){       
+                        // dd($matkul_kelas_val->id , $value->kelas->id);
+                        if($matkul_kelas_val->id === $value->kelas->id){
+                            $index_search = $index_kelas;
+                            break;
+                        }
+                    }
+                    
+                    $kelas_group = count($matkul_kelas) > 1 ? " *) (".$alphabet[$index_search].")" : '';
+
+                    $value->nama = $value->kelas->mataKuliah->nama . $kelas_group;
+                    
+                    $populations[$key] = $value;
+                }else{
+                    $value->nama = $value->kelas->mataKuliah->nama;
+                    $populations[$key] = $value;
+                }                
+            }
 
             return view('admin.populations.index', compact("hari_id" ,"jurusan_id",'last_id','populations', 'title', 'jurusans', 'dosens', 'matkuls', 'ruangans', 'kurikulums', 'id'));
         }
@@ -67,7 +100,8 @@ class Controller_populations extends Controller
 
     public function pengampu(Request $request)
     {
-        $last_id = M_kurikulum::all()->last()->id;      
+        $last_id = M_kurikulum::all()->last()->id;    
+        $alphabet = range('A', 'Z');    
         if (isset($request->kurikulum_id)) {
             $validatedData = $request->validate([
                 'kurikulum_id' => 'required'
@@ -80,21 +114,75 @@ class Controller_populations extends Controller
             $jurusan_id = $request->jurusan_filter;
             if(isset($request->jurusan_filter) && $request->jurusan_filter != ""){
                 // dd($request->jurusan_filter);
-                $populations = M_Populations::where(['kurikulum_id' => $id, 'jurusan_id' => $jurusan_id ])->paginate(10) ;                
+                $populations = M_Populations::where(['kurikulum_id' => $id, 'jurusan_id' => $jurusan_id ])->paginate(50) ;                
             }else{
-                $populations = M_Populations::where('kurikulum_id', $id)->paginate(10);
+                $populations = M_Populations::where('kurikulum_id', $id)->paginate(50);
             }
 
             $jurusans = M_jurusan::all();
             $dosens = M_dosen::where(["tersedia" => 1])->get();
             $matkuls = M_mata_kuliah::all();
             $ruangans = M_ruangan::all();
-            // $kurikulums = M_kurikulum::all();
+            $kelas_all = M_kelas::all();            
             $title = "Halaman Pengampu";
+            
+            $kelas = [];
+            foreach ($populations as $key => $value) {
+                // -> as it return std object
+                $matkul_kelas = M_kelas::where('matkul_id',$value->kelas->matkul_id)->get();
+
+                $index_search = -1;
+
+                if(count($matkul_kelas) > 1){
+                    // $index_search = array_search($value->kelas, $matkul_kelas);
+                    foreach($matkul_kelas as $index_kelas => $matkul_kelas_val){       
+                        // dd($matkul_kelas_val->id , $value->kelas->id);
+                        if($matkul_kelas_val->id === $value->kelas->id){
+                            $index_search = $index_kelas;
+                            break;
+                        }
+                    }
+                    
+                    $kelas_group = count($matkul_kelas) > 1 ? " *) (".$alphabet[$index_search].")" : '';
+
+                    $value->nama = $value->kelas->mataKuliah->nama . $kelas_group;
+                    
+                    $populations[$key] = $value;
+                }else{
+                    $value->nama = $value->kelas->mataKuliah->nama;
+                    $populations[$key] = $value;
+                }                
+            }
+
+            // dd($populations);
+
+            $kelas_list = [];
+            foreach ($kelas_all as $key => $value) {
+                // -> as it return std object
+                $kelas_list[$value->matkul_id][] = $value;
+            }
+
+            $kelas_list_final = [];
+            foreach ($kelas_list as $mks){
+                foreach ($mks as $index => $mk){
+                    $kelas_group = count($mks) > 1 ? " *) (".$alphabet[$index].")" : '';
+
+                    $mk->nama = $mk->mataKuliah->nama . $kelas_group;
+
+                    
+                    $kelas_list_final[] = $mk;
+                }
+            }
+            // dd($kelas_list_final[5]);
+
+
+
 
             
 
-            return view('admin.populations.pengampu', compact('jurusan_id','last_id','populations', 'title', 'jurusans', 'dosens', 'matkuls', 'ruangans', 'kurikulums', 'id'));
+            // dd($kelas_list);
+
+            return view('admin.populations.pengampu', compact('jurusan_id','last_id','populations', 'title', 'jurusans', 'dosens', 'matkuls', 'ruangans', 'kurikulums', 'id', 'kelas', 'alphabet', 'kelas_list','kelas_list_final'));
         }
 
         $title = 'Halaman Pengampu';
@@ -110,7 +198,7 @@ class Controller_populations extends Controller
 
         $validatedData = $request->validate([
             'jurusan_id' => 'required|string',
-            'matkul_id' => 'required|string',
+            'kelas_id' => 'required|string',
             'dosen_id' => 'required',
             'kurikulum_id' => 'required'
         ]);
@@ -283,7 +371,7 @@ class Controller_populations extends Controller
         session(['generatedScheduleIds' => $generatedScheduleIds]);
         // Redirect ke halaman tampilan dengan data jadwal yang di-generate
         $title = 'Populations';
-        $populations = M_Populations::with(['jurusan', 'mataKuliah', 'dosen', 'ruangan'])->paginate(10);
+        $populations = M_Populations::with(['jurusan', 'mataKuliah', 'dosen', 'ruangan'])->paginate(50);
         $jurusans = M_jurusan::all();
         $dosens = M_dosen::all();
         $matkuls = M_mata_kuliah::all();
@@ -291,6 +379,87 @@ class Controller_populations extends Controller
         $kurikulums = M_kurikulum::all();
         return view('admin.populations.generate', compact('populations', 'title', 'jurusans', 'dosens', 'matkuls', 'ruangans', 'sortedSchedules', 'generatedScheduleIds', 'kurikulums'));
     }
+
+    public function pengaturan_algoritma(){
+        $title = 'Kelola Pengaturan Algoritma';
+
+        $pengaturan = M_pengaturan_algoritma::first();
+        
+        return view('admin.populations.algoritma', compact('title', 'pengaturan'));
+    }
+
+    public function update_pengaturan_algoritma(Request $request)
+    {
+        // Validasi data yang diterima dari form
+        $validatedData = $request->validate([
+            'umur' => 'required',
+            'waktu' => 'required',
+            
+        ]);
+
+        // Cari ruangan berdasarkan ID
+        $pengaturan = M_pengaturan_algoritma::findOrFail(1);
+
+        // Update data pengaturan
+        $pengaturan->umur = $validatedData['umur'];
+        $pengaturan->waktu = $validatedData['waktu'];                
+
+        // Simpan perubahan
+        $pengaturan->save();
+
+        // Jika penyimpanan berhasil, kembalikan respons berhasil
+        return back()->with('success', 'Data Pengaturan algoritma berhasil diperbarui.');
+    }
+
+    public function slot(){
+        $title = 'Kelola Slot Waktu';
+        $users = M_slot_waktu::paginate(10);
+        return view('admin.populations.slot', compact('title', 'users'));
+    }
+
+    public function edit_slot($id)
+    {
+        $title = 'Edit slot waktu';
+        $slot = M_slot_waktu::findOrFail($id);
+        
+        return view('admin.populations.editSlot', compact('title', 'slot'));
+    }
+
+    public function update_slot(Request $request, $id)
+    {
+        $validatedData = $request->validate([
+            'time' => 'required|unique:time_slot',             
+            // 'ruangan_id' => 'required|string',
+        ]);                        
+        
+        $slot = M_slot_waktu::findOrFail($id);
+        $slot->update($validatedData);
+        return redirect()->route('slot')->with('success', 'Data slot waktu berhasil diperbarui.');
+    }
+
+    public function add_slot(Request $request){
+        
+        $validatedData = $request->validate([
+            'time' => 'required|unique:time_slot',            
+        ]);
+        
+        // dd($data_dosen);
+        M_slot_waktu::insert([
+            'time' => $request->time
+        ]);
+
+        return back()->with('success', 'Data waktu telah ditambah');
+    }
+
+    public function delete_slot($id)
+    {
+        // Temukan guru berdasarkan ID
+        $gen = M_slot_waktu::findOrFail($id);
+        $gen->delete();
+        // Simpan pesan berhasil ke dalam session
+        return redirect()->back()->with('success', 'Data waktu telah dihapus');
+    }
+
     public function saveSchedules(Request $request)
     {
         // Ambil data sortedSchedules dari request
@@ -319,6 +488,11 @@ class Controller_populations extends Controller
     public function export()
     {
         return Excel::download(new Export_Jadwal, 'population.xlsx');
+    }
+
+    public function exportTemplate()
+    {
+        return Excel::download(new Export_Template_Pengampu, 'template-pengampu.xlsx');
     }
 
     public function import(Request $request)

@@ -41,6 +41,7 @@ Route::get('/dosen/{id}/edit', [Controller_dosen::class, 'edit'])->name('edit_do
 Route::put('/dosen/{id}', [Controller_dosen::class, 'update'])->name('update_dosen');
 Route::post('/dosen/tambah', [Controller_dosen::class, 'create'])->name('store_dosen');
 Route::post('/dosen/import', [Controller_dosen::class, 'import'])->name('import-dosens');
+Route::get('/dosen/exportTemplate', [Controller_dosen::class, 'exportTemplate'])->name('export-dosens-template');
 // routes jurusan
 Route::get('/jurusan', [Controller_jurusan::class, 'show'])->name('jurusan');
 Route::delete('/jurusan-delete/{id}', [Controller_jurusan::class, 'delete'])->name('hapus_jurusan');
@@ -48,6 +49,7 @@ Route::get('/jurusan/{id}/edit', [Controller_jurusan::class, 'edit'])->name('edi
 Route::put('/jurusan/{id}', [Controller_jurusan::class, 'update'])->name('update_jurusan');
 Route::post('/jurusan/tambah', [Controller_jurusan::class, 'create'])->name('store_jurusan');
 Route::post('/jurusan/import', [Controller_jurusan::class, 'import'])->name('import-jurusans');
+Route::get('/jurusan/exportTemplate', [Controller_jurusan::class, 'exportTemplate'])->name('export-jurusans-template');
 // routes matkul
 Route::get('/matkul', [Controller_mata_kuliah::class, 'show'])->name('matkul');
 Route::delete('/matkul-delete/{id}', [Controller_mata_kuliah::class, 'delete'])->name('hapus_matkul');
@@ -55,6 +57,16 @@ Route::get('/matkul/{id}/edit', [Controller_mata_kuliah::class, 'edit'])->name('
 Route::put('/matkul/{id}', [Controller_mata_kuliah::class, 'update'])->name('update_matkul');
 Route::post('/matkul/tambah', [Controller_mata_kuliah::class, 'create'])->name('store_matkul');
 Route::post('/matkul/import', [Controller_mata_kuliah::class, 'import'])->name('import-matkuls');
+Route::get('/matkul/export', [Controller_mata_kuliah::class, 'exportTemplate'])->name('export-matkuls-template');
+
+// routes matkul
+Route::get('/matkul-class/all', [Controller_mata_kuliah::class, 'show_class_all'])->name('matkul-class-all');
+Route::get('/matkul-class/{id}', [Controller_mata_kuliah::class, 'show_class'])->name('matkul-class');
+Route::post('/matkul-class', [Controller_mata_kuliah::class, 'add_class'])->name('add-class');
+
+Route::put('/matkul-class', [Controller_mata_kuliah::class, 'edit_class'])->name('edit-class');
+Route::delete('/matkul-class/{id}', [Controller_mata_kuliah::class, 'remove_class'])->name('remove-class');
+
 // routes ruangan
 Route::get('/ruangan', [Controller_ruangan::class, 'show'])->name('ruangan');
 Route::delete('/ruangan-delete/{id}', [Controller_ruangan::class, 'delete'])->name('hapus_ruangan');
@@ -62,6 +74,7 @@ Route::get('/ruangan/{id}/edit', [Controller_ruangan::class, 'edit'])->name('edi
 Route::put('/ruangan/{id}', [Controller_ruangan::class, 'update'])->name('update_ruangan');
 Route::post('/ruangan/tambah', [Controller_ruangan::class, 'create'])->name('store_ruangan');
 Route::post('/ruangan/import', [Controller_ruangan::class, 'import'])->name('import-ruangans');
+Route::get('/ruangan/export', [Controller_ruangan::class, 'exportTemplate'])->name('export-ruangans-template');
 // routes ketersediaan dosen
 Route::get('/ketersediaan-dosen', [Controller_ketersediaan_dosen::class, 'show'])->name('k_dosen');
 Route::delete('/ketersediaan-dosen-delete/{id}', [Controller_ketersediaan_dosen::class, 'delete'])->name('hapus_k_dosen');
@@ -84,6 +97,7 @@ Route::put('/kelas/{id}', [Controller_kelas::class, 'update'])->name('update_kel
 // routes pengampu
 Route::get('/pengampu', [Controller_populations::class, 'pengampu'])->name('pengampu');
 Route::post('/pengampu/import', [Controller_populations::class, 'import'])->name('import-pengampu');
+Route::get('/pengampu/exportTemplate', [Controller_populations::class, 'exportTemplate'])->name('export-template-pengampu');
 // Route::post('/population/tambah', [Controller_populations::class, 'create'])->name('store_population');
 // Route::delete('/population-delete/{id}', [Controller_populations::class, 'delete'])->name('hapus_population');
 // Route::get('/population/{id}/edit', [Controller_populations::class, 'edit'])->name('edit_population');
@@ -94,6 +108,17 @@ Route::post('/population/tambah', [Controller_populations::class, 'create'])->na
 Route::delete('/population-delete/{id}', [Controller_populations::class, 'delete'])->name('hapus_population');
 Route::get('/population/{id}/edit', [Controller_populations::class, 'edit'])->name('edit_population');
 Route::put('/population/{id}', [Controller_populations::class, 'update'])->name('update_population');
+
+
+Route::get('/pengaturan-algoritma', [Controller_populations::class, 'pengaturan_algoritma'])->name('pengaturan_algoritma');
+Route::put('/pengaturan-algoritma', [Controller_populations::class, 'update_pengaturan_algoritma'])->name('update_pengaturan_algoritma');
+
+Route::get('/slot', [Controller_populations::class, 'slot'])->name('slot');
+Route::get('/slot/{id}/edit', [Controller_populations::class, 'edit_slot'])->name('edit_slot');
+Route::post('/slot', [Controller_populations::class, 'add_slot'])->name('add_slot');
+Route::put('/slot/{id}', [Controller_populations::class, 'update_slot'])->name('update_slot');
+Route::delete('/delete-slot/{id}', [Controller_populations::class, 'delete_slot'])->name('delete_slot');
+
 // routes kurikulum
 Route::get('/kurikulum', [Controller_kurikulum::class, 'show'])->name('kurikulum');
 Route::post('/kurikulum/tambah', [Controller_kurikulum::class, 'create'])->name('store_kurikulum');
@@ -101,7 +126,6 @@ Route::delete('/kurikulum-delete/{id}', [Controller_kurikulum::class, 'delete'])
 Route::get('/kurikulum/{id}/edit', [Controller_kurikulum::class, 'edit'])->name('edit_kurikulum');
 Route::put('/kurikulum/{id}', [Controller_kurikulum::class, 'update'])->name('update_kurikulum');
 
-// Route::get('/population/periode', [Controller_kurikulum::class, 'select_periode'])->name('kurikum-periode');
 // generate data
 Route::post('/population-generate', [Controller_populations::class, 'generate'])->name('generate-population');
 Route::post('/save-schedules', [Controller_populations::class, 'saveSchedules'])->name('saveSchedules');
@@ -111,9 +135,10 @@ Route::post('/generate-jadwal', [Controller_Perhitungan::class, 'generateSchedul
 
 // mahasiswa 
 
-Route::get('/mahasiswa/', [Controller_Mahasiswa::class, 'show'])->name('dashboard-mahasiswa');
+Route::get('/jadwal', [Controller_Mahasiswa::class, 'show'])->name('dashboard-mahasiswa');
 Route::post('/population/export', [Controller_populations::class, 'export'])->name('export-populations');
-
 
 // Export
 Route::get('Export', [Controller_Export::class, 'show'])->name('Export-table');
+
+Route::get('/convert', [Controller_Export::class, 'convert'])->name('Export-table');

@@ -12,7 +12,7 @@ class M_Populations extends Model
     use HasFactory;
     protected $table = 'populations';
     protected $primaryKey = 'id';
-    protected $fillable = ['jurusan_id', 'matkul_id',  'ruangan_id', 'kapasitas', 'hari', 'waktu_mulai', 'waktu_selesai', 'kurikulum_id'];
+    protected $fillable = ['id','jurusan_id', 'kelas_id',  'ruangan_id', 'hari', 'waktu_mulai', 'waktu_selesai', 'kurikulum_id'];
     public $timestamps;
 
     public function jurusan(): BelongsTo
@@ -21,9 +21,9 @@ class M_Populations extends Model
     }
 
     // Relasi dengan tabel mata kuliah
-    public function mataKuliah(): BelongsTo
+    public function kelas(): BelongsTo
     {
-        return $this->belongsTo(M_mata_kuliah::class, 'matkul_id');
+        return $this->belongsTo(M_kelas::class, 'kelas_id');
     }
 
     public function ruangan(): BelongsTo

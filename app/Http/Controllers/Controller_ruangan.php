@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\Export_Template_Ruangan;
 use App\Imports\RuanganImport;
 use App\Models\M_jurusan;
 use App\Models\M_ruangan;
@@ -23,6 +24,7 @@ class Controller_ruangan extends Controller
         // Validasi data yang diterima dari form
         $validatedData = $request->validate([
             'nama' => 'required|string|max:255',
+            'lantai' => 'required|integer|min:1|max:5',
             'kode' => 'required|string|max:50|unique:ruangan',
             'kapasitas' => 'required|integer|min:1',
             'tipe_ruangan' => 'required|string|in:umum,online,khusus',
@@ -33,6 +35,7 @@ class Controller_ruangan extends Controller
         $ruangan = new M_ruangan();
         $ruangan->nama = $validatedData['nama'];
         $ruangan->kode = $validatedData['kode'];
+        $ruangan->lantai = $validatedData['lantai'];
         $ruangan->kapasitas = $validatedData['kapasitas'];
         $ruangan->tipe_ruangan = $validatedData['tipe_ruangan'];
 
@@ -62,6 +65,7 @@ class Controller_ruangan extends Controller
         // Validasi data yang diterima dari form
         $validatedData = $request->validate([
             'nama' => 'required|string|max:255',
+            'lantai' => 'required|integer|min:1|max:5',
             'kode' => 'required|string|max:50|unique:ruangan,kode,' . $id,
             'kapasitas' => 'required|integer|min:1',
             'tipe_ruangan' => 'required|string|in:umum,online,khusus',
@@ -74,6 +78,7 @@ class Controller_ruangan extends Controller
         // Update data ruangan
         $ruangan->nama = $validatedData['nama'];
         $ruangan->kode = $validatedData['kode'];
+        $ruangan->lantai = $validatedData['lantai'];
         $ruangan->kapasitas = $validatedData['kapasitas'];
         $ruangan->tipe_ruangan = $validatedData['tipe_ruangan'];
 
@@ -117,5 +122,11 @@ class Controller_ruangan extends Controller
 		// alihkan halaman kembali
 		return back()->with('success','Data Jurusan Berhasil Diimport!');
 	
+    }
+
+    public function exportTemplate()
+    {
+        
+        return Excel::download(new Export_Template_Ruangan, 'template-ruangan.xlsx');
     }
 }

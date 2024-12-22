@@ -4,8 +4,9 @@ namespace App\Imports;
 
 use App\Models\M_dosen;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class DosenImport implements ToModel
+class DosenImport implements ToModel, WithHeadingRow
 {
     /**
     * @param array $row
@@ -13,12 +14,19 @@ class DosenImport implements ToModel
     * @return \Illuminate\Database\Eloquent\Model|null
     */
     public function model(array $row)
-    {
-        return new M_dosen([
-            "nama" => $row[1],
-            "kode" => $row[2],
-            "jurusan_id" => $row[3],
-            "tersedia" =>$row[4],
-        ]);
+    {        
+        if($row['nama'] != ""){
+
+            $gender = strtolower($row['jenis_kelamin']) == 'l' ? 'male' : 'female';            
+
+            return new M_dosen([
+                "nama" => $row['nama'],
+                "umur" => $row['umur'],
+                "gender" => $gender,
+                "kode" => $row['kode'],
+                "jurusan_id" => $row['id_jurusan'],
+                "tersedia" =>$row['tersedia'],
+            ]);
+        };
     }
 }

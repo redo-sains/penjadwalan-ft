@@ -12,6 +12,6 @@ class M_mata_kuliah extends Model
         protected $primaryKey = 'id';
         public $timestamps = true;
         protected $fillable = [
-            'nama', 'kode', 'semester', 'jurusan_id', 'sks'
+            'nama', 'kode', 'semester', 'jurusan_id', 'sks', 'jumlah'
         ];
 }

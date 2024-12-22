@@ -13,14 +13,22 @@
                     <div>
 
                         <button id="test"
-                            class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                            class="px-4 py-2 mr-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
                             Tambah Mata Kuliah
                         </button>
 
+                        <a href="{{route('matkul-class-all')}}"
+                            class="px-4 py-2 mr-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                            Semua Kelas
+                    </a>
                         <button id="test2"
-                            class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                            class="px-4 py-2 mr-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
                             Import Mata Kuliah
                         </button>
+                        <a href="{{route('export-matkuls-template')}}"
+                            class="px-4 py-2 mr-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                            Export Template
+                    </a>
                         <button id="triggerOpenModal" @click="openModal" class="hidden">
                             open Modal
                         </button>
@@ -39,6 +47,7 @@
                                     <th class="px-4 py-3">Kode MK</th>
                                     <th class="px-4 py-3">Jurusan</th>
                                     <th class="px-4 py-3">Semester</th>
+                                    {{-- <th class="px-4 py-3">Jumlah Siswa</th> --}}
                                     <th class="px-4 py-3">SKS</th>
                                     <th class="px-4 py-3">Actions</th>
                                 </tr>
@@ -81,6 +90,9 @@
                                         <td class="px-4 py-3 text-sm">
                                             {{ $mk->semester }}
                                         </td>
+                                        {{-- <td class="px-4 py-3 text-sm">
+                                            {{ $mk->jumlah }}
+                                        </td> --}}
                                         <td class="px-4 py-3 text-sm">
                                             {{ $mk->sks }}
                                         </td>
@@ -96,6 +108,7 @@
                                                         </path>
                                                     </svg>
                                                 </a>
+                                                
                                                 <form action="{{ route('hapus_matkul', ['id' => $mk->id]) }}"
                                                     method="post">
                                                     @csrf
@@ -112,6 +125,14 @@
                                                         </svg>
                                                     </button>
                                                 </form>
+                                                <a 
+                                                    href="{{ route('matkul-class', ['id' => $mk->id]) }}"
+                                                    class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
+                                                    aria-label="Edit">
+                                                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-collection-fill" viewBox="0 0 16 16">
+                                                        <path d="M0 13a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 16 13V6a1.5 1.5 0 0 0-1.5-1.5h-13A1.5 1.5 0 0 0 0 6zM2 3a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 0-1h-11A.5.5 0 0 0 2 3m2-2a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 0-1h-7A.5.5 0 0 0 4 1"/>
+                                                      </svg>
+                                                </a>
                                             </div>
                                         </td>
                                     </tr>
@@ -234,6 +255,27 @@
                         </div>
                         <div class="px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
                             <label class="block text-sm">
+                                <span class="text-gray-700 dark:text-gray-400">Jumlah Mahasiswa</span>
+                                <!-- focus-within sets the color for the icon when input is focused -->
+                                <div
+                                    class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
+                                    <input name="jumlah"
+                                        class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
+                                        placeholder="masukan jumlah mahasiswa" />
+                                    <div class="absolute inset-y-0 flex items-center ml-3 pointer-events-none">
+                                        <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round"
+                                            stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path
+                                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                            <label class="block text-sm">
                                 <span class="text-gray-700 dark:text-gray-400">Semester</span>
                                 <!-- focus-within sets the color for the icon when input is focused -->
                                 <div
@@ -267,6 +309,28 @@
                                         @endforeach
                                     </select>
 
+                                    <div class="absolute inset-y-0 flex items-center ml-3 pointer-events-none">
+                                        <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round"
+                                            stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path
+                                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                            <label class="block text-sm">
+                                <span class="text-gray-700 dark:text-gray-400">Jumlah Kelas</span>
+                                <!-- focus-within sets the color for the icon when input is focused -->
+                                <div
+                                    class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
+                                    <input name="jumlah_kelas"
+                                        value="1"
+                                        class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
+                                        placeholder="masukan kode Jumlah Kelas" />
                                     <div class="absolute inset-y-0 flex items-center ml-3 pointer-events-none">
                                         <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round"
                                             stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"

@@ -11,45 +11,48 @@ class Controller_Perhitungan extends Controller
 {
     public function generateSchedule(Request $request)
     {
-        $rooms = M_ruangan::all()->toArray();
         $kurikulum_id = $request->kurikulum_id;
 
-        // M_Populations::where('kurikulum_id', $kurikulum_id)->delete();        
+        // Fetch rooms and populations based on the curriculum ID
+        $rooms = M_ruangan::all()->toArray();
+        $populationsQuery = M_Populations::with('dosen');
 
-        if (isset($kurikulum_id)) {
-            $populations = M_Populations::where('kurikulum_id', $kurikulum_id)->with('dosen')->get()->toArray();
-
-            foreach ($populations as $index => $pengampu) {
-                # code...
-            }
-            // dd($populations);
-            $jadwal = M_Populations::where('kurikulum_id', $kurikulum_id)->get();
-        } else {
-            $populations = M_Populations::with('dosen')->all()->toArray();
-            $jadwal = M_Populations::all();
+        if ($kurikulum_id) {
+            $populationsQuery->where('kurikulum_id', $kurikulum_id);
         }
-        // dd($rooms);
-        $ga = new GeneticAlgorithm(100, 0.02, 10, 50, $populations, $rooms);
+
+        $populations = $populationsQuery->get()->toArray();
+        $jadwal = M_Populations::where('kurikulum_id', $kurikulum_id)->get();
+
+        // Ensure populations are available before running the Genetic Algorithm
+        if (empty($populations)) {
+            return back()->withErrors(["message" => "No populations found for the selected curriculum."]);
+        }
+
+        $ga = new GeneticAlgorithm(50, 0.02, 20, 5, $populations, $rooms, 0.002);
         $result = $ga->run();
 
-        // dd($result);
+        $bestSchedule = $result['bestSchedule'];        
 
-        
-        $bestSchedule = $result['bestSchedule'];
+        foreach ($bestSchedule as $i => $population) {
+            if (isset($jadwal[$i])) {
+                $jadwal[$i]->fill([
+                    'ruangan_id' => $population['ruangan_id'],
+                    'hari' => $population['hari'],
+                    'waktu_mulai' => $population['waktu_mulai'],
+                    'waktu_selesai' => $population['waktu_selesai'],
+                ]);
 
-        
-        foreach($bestSchedule as $i=>$population){
-            // dd($population['ruangan_id'], $jadwal[$i]);
-            $jadwal[$i]->ruangan_id = $population['ruangan_id'];
-            $jadwal[$i]->hari = $population['hari'];
-            $jadwal[$i]->waktu_mulai = $population['waktu_mulai'];
-            $jadwal[$i]->waktu_selesai = $population['waktu_selesai'];
-
-            $jadwal[$i]->save();
+                try {
+                    $jadwal[$i]->save();
+                } catch (\Exception $e) {
+                    \Log::error('Failed to save jadwal: ' . $e->getMessage());
+                }
+            }
         }
-        // dd($bestSchedule, $jadwal);        
-        // $jadwal->save();
 
         return back()->with(["success generate" => true]);
     }
+
+    
 }

@@ -26,12 +26,12 @@
    
                                        <div class="px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
                                            <label class="block text-sm">
-                                               <span class="text-gray-700 dark:text-gray-400">Kurikulum</span>
+                                               <span class="text-gray-700 dark:text-gray-400">Tahun Ajaran</span>
                                                <div
                                                    class="relative text-gray-500 focus-within:text-purple-600 dark:focus-within:text-purple-400">
                                                    <select name="kurikulum_id" id="kurikulumSelect"
                                                        class="block w-full pl-10 mt-1 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-select">
-                                                       <option selected disabled>Pilih kurikulum</option>
+                                                       <option selected disabled>Pilih Tahun Ajaran</option>
     
                                                        @foreach ($kurikulums as $kurikulum)
                                                            <option
@@ -135,6 +135,13 @@
                                            @endisset
                                            
                                        </form>
+
+                                       <a class="mr-2 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple" href="{{route('slot')}}">
+                                            Slot Waktu
+                                       </a>
+                                       <a class="mr-2 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple" href="{{route('pengaturan_algoritma')}}">
+                                            Pengaturan
+                                       </a>
                                        
                                        <form method="POST" action="{{ route('export-populations') }}">
                                            @csrf
@@ -215,7 +222,7 @@
                    <div class="mt-4 mb-6">
                        <!-- Modal title -->
                        <p class="mb-2 px-3 text-lg font-semibold text-gray-700 dark:text-gray-300  ">
-                           Tambah GEN Baru
+                           Tambah Pengampu Baru
                        </p>
                        <!-- Modal description -->
                        <form class="grid grid-cols-2" action="{{ route('store_population') }}" method="POST">

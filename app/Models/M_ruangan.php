@@ -12,6 +12,6 @@ class M_ruangan extends Model
     protected $primaryKey = 'id';
     public $timestamps = true;
     protected $fillable = [
-        'nama', 'kode', 'kapasitas', 'tersedia', 'tipe_ruangan', 'jurusan_id',
+        'nama', 'kode', 'kapasitas', 'tersedia', 'tipe_ruangan', 'jurusan_id','lantai'
     ];
 }

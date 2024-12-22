@@ -11,14 +11,8 @@ class M_kelas extends Model
     use HasFactory;
     protected $table = 'kelas';
     protected $primaryKey = 'id';
-    protected $fillable = ['jurusan_id', 'matkul_id', 'dosen_id', 'kelas', 'kapasitas'];
-    public $timestamps = true;
-
-    // Relasi dengan tabel jurusan
-    public function jurusan(): BelongsTo
-    {
-        return $this->belongsTo(M_jurusan::class, 'jurusan_id');
-    }
+    protected $fillable = ['matkul_id', 'jumlah'];
+    public $timestamps = false;        
 
     // Relasi dengan tabel mata kuliah
     public function mataKuliah(): BelongsTo
@@ -26,9 +20,4 @@ class M_kelas extends Model
         return $this->belongsTo(M_mata_kuliah::class, 'matkul_id');
     }
 
-    // Relasi dengan tabel dosen
-    public function dosen(): BelongsTo
-    {
-        return $this->belongsTo(M_dosen::class, 'dosen_id');
-    }
 }

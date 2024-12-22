@@ -4,8 +4,9 @@ namespace App\Imports;
 
 use App\Models\M_mata_kuliah;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class MataKuliahImport implements ToModel
+class MataKuliahImport implements ToModel, WithHeadingRow
 {
     /**
     * @param array $row
@@ -14,12 +15,16 @@ class MataKuliahImport implements ToModel
     */
     public function model(array $row)
     {
-        return new M_mata_kuliah([
-            "kode" => $row[1],
-            "nama" => $row[2],
-            "sks" => $row[3],
-            "semester" => $row[4],
-            "jurusan_id" => $row[5],
-        ]);
+        
+        if($row['nama']!=""){
+            return new M_mata_kuliah([
+                "kode" => $row['kode'],
+                "nama" => $row['nama'],
+                "sks" => $row['sks'],
+                "jumlah" => $row['jumlah_mahasiswa'],
+                "semester" => $row['semester'],
+                "jurusan_id" => $row['jurusan_id'],
+            ]);
+        }
     }
 }
